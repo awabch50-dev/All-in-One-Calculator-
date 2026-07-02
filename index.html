@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>CALC X — Premium Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- Particle canvas -->
+<canvas id="particles"></canvas>
+
+<!-- Glow cursor -->
+<div id="cursor-glow"></div>
+
+<!-- Toast container -->
+<div id="toast-container"></div>
+
+<!-- MAIN APP -->
+<div class="app" id="app">
+
+  <!-- Sidebar Navigation -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">⌗</div>
+      <span class="logo-name">CALC<span class="logo-x">X</span></span>
+    </div>
+
+    <div class="nav-items">
+      <button class="nav-item active" data-panel="standard">
+        <span class="nav-icon">◻</span>
+        <span class="nav-label">Standard</span>
+      </button>
+      <button class="nav-item" data-panel="scientific">
+        <span class="nav-icon">∑</span>
+        <span class="nav-label">Scientific</span>
+      </button>
+      <button class="nav-item" data-panel="currency">
+        <span class="nav-icon">₿</span>
+        <span class="nav-label">Currency</span>
+      </button>
+      <button class="nav-item" data-panel="unit">
+        <span class="nav-icon">⊕</span>
+        <span class="nav-label">Units</span>
+      </button>
+      <button class="nav-item" data-panel="bmi">
+        <span class="nav-icon">♡</span>
+        <span class="nav-label">BMI</span>
+      </button>
+      <button class="nav-item" data-panel="tip">
+        <span class="nav-icon">✦</span>
+        <span class="nav-label">Tip</span>
+      </button>
+      <button class="nav-item" data-panel="age">
+        <span class="nav-icon">◷</span>
+        <span class="nav-label">Age</span>
+      </button>
+      <button class="nav-item" data-panel="loan">
+        <span class="nav-icon">◈</span>
+        <span class="nav-label">Loan/EMI</span>
+      </button>
+    </div>
+
+    <div class="sidebar-footer">
+      <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+        <span id="themeIcon">◑</span>
+      </button>
+      <button class="history-toggle" id="historyToggle" title="History">
+        <span>☰</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile bottom nav -->
+  <nav class="bottom-nav" id="bottomNav">
+    <button class="bnav-item active" data-panel="standard">◻<span>Std</span></button>
+    <button class="bnav-item" data-panel="scientific">∑<span>Sci</span></button>
+    <button class="bnav-item" data-panel="currency">₿<span>FX</span></button>
+    <button class="bnav-item" data-panel="unit">⊕<span>Unit</span></button>
+    <button class="bnav-item" data-panel="bmi">♡<span>More</span></button>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <!-- ══ STANDARD PANEL ══ -->
+    <section class="panel active" id="panel-standard">
+      <div class="panel-header">
+        <h1 class="panel-title">Calculator</h1>
+        <div class="header-pills">
+          <span class="pill" id="std-mode-pill">DEG</span>
+          <button class="clear-hist-btn" id="std-clear-hist">Clear History</button>
+        </div>
+      </div>
+
+      <div class="display-card" id="std-display-card">
+        <div class="display-expression" id="std-expr">&nbsp;</div>
+        <div class="display-result" id="std-result">0</div>
+        <div class="display-subtext" id="std-sub">&nbsp;</div>
+        <div class="display-glow"></div>
+      </div>
+
+      <div class="history-bar" id="std-hist-bar"></div>
+
+      <div class="keypad std-keypad">
+        <button class="k k-fn" data-a="clear">AC</button>
+        <button class="k k-fn" data-a="sign">+/−</button>
+        <button class="k k-fn" data-a="percent">%</button>
+        <button class="k k-op" data-o="÷">÷</button>
+
+        <button class="k k-num" data-n="7">7</button>
+        <button class="k k-num" data-n="8">8</button>
+        <button class="k k-num" data-n="9">9</button>
+        <button class="k k-op" data-o="×">×</button>
+
+        <button class="k k-num" data-n="4">4</button>
+        <button class="k k-num" data-n="5">5</button>
+        <button class="k k-num" data-n="6">6</button>
+        <button class="k k-op" data-o="−">−</button>
+
+        <button class="k k-num" data-n="1">1</button>
+        <button class="k k-num" data-n="2">2</button>
+        <button class="k k-num" data-n="3">3</button>
+        <button class="k k-op" data-o="+">+</button>
+
+        <button class="k k-num k-wide" data-n="0">0</button>
+        <button class="k k-num" data-a="dot">.</button>
+        <button class="k k-eq" data-a="eq">=</button>
+      </div>
+    </section>
+
+    <!-- ══ SCIENTIFIC PANEL ══ -->
+    <section class="panel" id="panel-scientific">
+      <div class="panel-header">
+        <h1 class="panel-title">Scientific</h1>
+        <div class="header-pills">
+          <button class="pill pill-toggle" id="deg-rad-toggle">DEG</button>
+          <button class="pill pill-toggle" id="inv-toggle">INV</button>
+        </div>
+      </div>
+
+      <div class="display-card">
+        <div class="display-expression" id="sci-expr">&nbsp;</div>
+        <div class="display-result" id="sci-result">0</div>
+        <div class="display-subtext" id="sci-sub">&nbsp;</div>
+        <div class="display-glow"></div>
+      </div>
+
+      <div class="history-bar" id="sci-hist-bar"></div>
+
+      <div class="keypad sci-keypad">
+        <!-- Sci row 1 -->
+        <button class="k k-sci" data-sci="sin">sin</button>
+        <button class="k k-sci" data-sci="cos">cos</button>
+        <button class="k k-sci" data-sci="tan">tan</button>
+        <button class="k k-sci" data-sci="log">log</button>
+        <button class="k k-sci" data-sci="ln">ln</button>
+        <!-- row 2 -->
+        <button class="k k-sci" data-sci="sqrt">√</button>
+        <button class="k k-sci" data-sci="cbrt">∛</button>
+        <button class="k k-sci" data-sci="sq">x²</button>
+        <button class="k k-sci" data-sci="pow">xʸ</button>
+        <button class="k k-sci" data-sci="exp">eˣ</button>
+        <!-- row 3 -->
+        <button class="k k-sci" data-sci="pi">π</button>
+        <button class="k k-sci" data-sci="e">e</button>
+        <button class="k k-sci" data-sci="abs">|x|</button>
+        <button class="k k-sci" data-sci="inv">1/x</button>
+        <button class="k k-sci" data-sci="fact">n!</button>
+        <!-- row 4: num -->
+        <button class="k k-fn" data-a="clear">AC</button>
+        <button class="k k-fn" data-a="sign">+/−</button>
+        <button class="k k-fn" data-a="bksp">⌫</button>
+        <button class="k k-fn" data-a="percent">%</button>
+        <button class="k k-op" data-o="÷">÷</button>
+
+        <button class="k k-num" data-n="7">7</button>
+        <button class="k k-num" data-n="8">8</button>
+        <button class="k k-num" data-n="9">9</button>
+        <button class="k k-op" data-o="×">×</button>
+        <button class="k k-op" data-o="−">−</button>
+
+        <button class="k k-num" data-n="4">4</button>
+        <button class="k k-num" data-n="5">5</button>
+        <button class="k k-num" data-n="6">6</button>
+        <button class="k k-op" data-o="+">+</button>
+        <button class="k k-sci" data-sci="mod">mod</button>
+
+        <button class="k k-num" data-n="1">1</button>
+        <button class="k k-num" data-n="2">2</button>
+        <button class="k k-num" data-n="3">3</button>
+        <button class="k k-num" data-n="0">0</button>
+        <button class="k k-eq" data-a="eq">=</button>
+      </div>
+    </section>
+
+    <!-- ══ CURRENCY PANEL ══ -->
+    <section class="panel" id="panel-currency">
+      <div class="panel-header">
+        <h1 class="panel-title">Currency</h1>
+        <button class="refresh-btn" id="fx-refresh">↻ Live Rates</button>
+      </div>
+      <div class="fx-status" id="fx-status">Reference rates · Tap ↻ for live</div>
+
+      <div class="fx-card">
+        <div class="fx-row">
+          <div class="fx-left">
+            <span class="fx-flag" id="fx-flag-from">🇺🇸</span>
+            <select class="fx-sel" id="fx-from"></select>
+          </div>
+          <input class="fx-input" id="fx-amount-from" type="number" value="1" placeholder="0.00"/>
+        </div>
+        <div class="fx-divider">
+          <button class="fx-swap" id="fx-swap">⇅</button>
+          <span class="fx-rate-badge" id="fx-rate-badge">—</span>
+        </div>
+        <div class="fx-row">
+          <div class="fx-left">
+            <span class="fx-flag" id="fx-flag-to">🇵🇰</span>
+            <select class="fx-sel" id="fx-to"></select>
+          </div>
+          <input class="fx-input fx-output" id="fx-amount-to" type="number" readonly placeholder="0.00"/>
+        </div>
+      </div>
+
+      <div class="section-label">Popular Pairs</div>
+      <div class="pairs-grid" id="pairs-grid"></div>
+
+      <div class="section-label" style="margin-top:20px">All Rates vs USD</div>
+      <div class="rates-table" id="rates-table"></div>
+    </section>
+
+    <!-- ══ UNIT PANEL ══ -->
+    <section class="panel" id="panel-unit">
+      <div class="panel-header">
+        <h1 class="panel-title">Unit Converter</h1>
+      </div>
+      <div class="unit-cats" id="unit-cats">
+        <button class="ucat active" data-cat="length">📏 Length</button>
+        <button class="ucat" data-cat="weight">⚖️ Weight</button>
+        <button class="ucat" data-cat="temp">🌡️ Temp</button>
+        <button class="ucat" data-cat="area">🟦 Area</button>
+        <button class="ucat" data-cat="speed">🚀 Speed</button>
+        <button class="ucat" data-cat="data">💾 Data</button>
+        <button class="ucat" data-cat="time">⏱ Time</button>
+        <button class="ucat" data-cat="energy">⚡ Energy</button>
+        <button class="ucat" data-cat="pressure">🌀 Pressure</button>
+        <button class="ucat" data-cat="volume">🧪 Volume</button>
+      </div>
+      <div class="unit-card">
+        <div class="unit-row-wrap">
+          <select class="unit-sel" id="unit-from-sel"></select>
+          <input class="unit-inp" id="unit-inp-from" type="number" value="1"/>
+        </div>
+        <div class="unit-mid">
+          <button class="fx-swap" id="unit-swap">⇅</button>
+          <div class="unit-formula-text" id="unit-formula"></div>
+        </div>
+        <div class="unit-row-wrap">
+          <select class="unit-sel" id="unit-to-sel"></select>
+          <input class="unit-inp unit-out" id="unit-inp-to" type="number" readonly/>
+        </div>
+      </div>
+      <div class="unit-quick-grid" id="unit-quick"></div>
+    </section>
+
+    <!-- ══ BMI PANEL ══ -->
+    <section class="panel" id="panel-bmi">
+      <div class="panel-header"><h1 class="panel-title">BMI Calculator</h1></div>
+      <div class="tool-card">
+        <div class="toggle-row">
+          <button class="unit-pill active" id="bmi-metric">Metric</button>
+          <button class="unit-pill" id="bmi-imperial">Imperial</button>
+        </div>
+        <div class="input-group" id="bmi-inputs-metric">
+          <div class="field-wrap">
+            <label>Height (cm)</label>
+            <input class="tool-input" id="bmi-h-cm" type="number" placeholder="170" value="170"/>
+          </div>
+          <div class="field-wrap">
+            <label>Weight (kg)</label>
+            <input class="tool-input" id="bmi-w-kg" type="number" placeholder="70" value="70"/>
+          </div>
+        </div>
+        <div class="input-group hidden" id="bmi-inputs-imperial">
+          <div class="field-wrap">
+            <label>Height (ft)</label>
+            <input class="tool-input" id="bmi-h-ft" type="number" placeholder="5.7" value="5.7"/>
+          </div>
+          <div class="field-wrap">
+            <label>Weight (lbs)</label>
+            <input class="tool-input" id="bmi-w-lbs" type="number" placeholder="154" value="154"/>
+          </div>
+        </div>
+        <button class="calc-btn" id="bmi-calc-btn">Calculate BMI</button>
+        <div class="result-display" id="bmi-result-display">
+          <div class="big-result" id="bmi-number">—</div>
+          <div class="result-label" id="bmi-cat">Enter values above</div>
+          <div class="bmi-bar-wrap">
+            <div class="bmi-bar">
+              <div class="bmi-fill" id="bmi-fill"></div>
+              <div class="bmi-marker" id="bmi-marker"></div>
+            </div>
+            <div class="bmi-labels"><span>Underweight</span><span>Normal</span><span>Overweight</span><span>Obese</span></div>
+          </div>
+          <div class="bmi-ideal" id="bmi-ideal"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ TIP PANEL ══ -->
+    <section class="panel" id="panel-tip">
+      <div class="panel-header"><h1 class="panel-title">Tip Calculator</h1></div>
+      <div class="tool-card">
+        <div class="field-wrap">
+          <label>Bill Amount ($)</label>
+          <input class="tool-input" id="tip-bill" type="number" placeholder="50.00" value="50"/>
+        </div>
+        <div class="field-wrap">
+          <label>Tip Percentage</label>
+          <div class="tip-quick-row">
+            <button class="tip-q" data-tip="10">10%</button>
+            <button class="tip-q active" data-tip="15">15%</button>
+            <button class="tip-q" data-tip="18">18%</button>
+            <button class="tip-q" data-tip="20">20%</button>
+            <button class="tip-q" data-tip="25">25%</button>
+          </div>
+          <input class="tool-input" id="tip-pct" type="number" placeholder="15" value="15"/>
+        </div>
+        <div class="field-wrap">
+          <label>Split Between</label>
+          <input class="tool-input" id="tip-split" type="number" placeholder="1" value="1" min="1"/>
+        </div>
+        <div class="tip-results">
+          <div class="tip-row"><span>Tip Amount</span><span class="tip-val" id="tip-amount">$7.50</span></div>
+          <div class="tip-row"><span>Total Bill</span><span class="tip-val" id="tip-total">$57.50</span></div>
+          <div class="tip-row tip-row-highlight"><span>Per Person</span><span class="tip-val" id="tip-per">$57.50</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ AGE PANEL ══ -->
+    <section class="panel" id="panel-age">
+      <div class="panel-header"><h1 class="panel-title">Age Calculator</h1></div>
+      <div class="tool-card">
+        <div class="field-wrap">
+          <label>Date of Birth</label>
+          <input class="tool-input" id="age-dob" type="date"/>
+        </div>
+        <div class="field-wrap">
+          <label>Calculate Until</label>
+          <input class="tool-input" id="age-to" type="date"/>
+        </div>
+        <button class="calc-btn" id="age-calc-btn">Calculate Age</button>
+        <div class="result-display" id="age-result">
+          <div class="age-grid" id="age-grid"></div>
+          <div class="next-bday" id="next-bday"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ LOAN PANEL ══ -->
+    <section class="panel" id="panel-loan">
+      <div class="panel-header"><h1 class="panel-title">Loan / EMI</h1></div>
+      <div class="tool-card">
+        <div class="field-wrap">
+          <label>Loan Amount ($)</label>
+          <input class="tool-input" id="loan-amount" type="number" placeholder="100000" value="100000"/>
+        </div>
+        <div class="field-wrap">
+          <label>Annual Interest Rate (%)</label>
+          <input class="tool-input" id="loan-rate" type="number" placeholder="8.5" value="8.5" step="0.1"/>
+        </div>
+        <div class="field-wrap">
+          <label>Loan Term (Years)</label>
+          <input class="tool-input" id="loan-years" type="number" placeholder="10" value="10"/>
+        </div>
+        <button class="calc-btn" id="loan-calc-btn">Calculate EMI</button>
+        <div class="loan-results" id="loan-results">
+          <div class="loan-big">
+            <div class="big-result" id="loan-emi">—</div>
+            <div class="result-label">Monthly EMI</div>
+          </div>
+          <div class="loan-breakdown" id="loan-breakdown"></div>
+          <div class="loan-chart-wrap">
+            <canvas id="loan-chart" width="260" height="260"></canvas>
+            <div class="chart-legend" id="chart-legend"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main><!-- end main-content -->
+
+  <!-- History Drawer -->
+  <div class="history-drawer" id="history-drawer">
+    <div class="drawer-header">
+      <h2>History</h2>
+      <button class="drawer-close" id="drawer-close">✕</button>
+    </div>
+    <div class="drawer-body" id="drawer-body">
+      <p class="drawer-empty">No calculations yet.</p>
+    </div>
+    <button class="drawer-clear" id="drawer-clear-all">Clear All</button>
+  </div>
+  <div class="drawer-overlay" id="drawer-overlay"></div>
+
+</div><!-- end app -->
+
+<script src="script.js"></script>
+</body>
+</html>
