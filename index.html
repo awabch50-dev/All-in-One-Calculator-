@@ -48,6 +48,15 @@
 <!-- Toast container -->
 <div id="toast-container"></div>
 
+<!-- Mobile-only quick controls: theme / language / history (sidebar is hidden on mobile) -->
+<div class="mobile-controls" id="mobileControls">
+  <button class="mobile-ctrl-btn theme-toggle-btn" id="mobileThemeToggle" title="Toggle theme"><span class="theme-icon-el">🌙</span></button>
+  <span class="mc-divider"></span>
+  <button class="mobile-ctrl-btn lang-toggle-btn" id="mobileLangToggle" title="Language"><span class="lang-icon-el">EN</span></button>
+  <span class="mc-divider"></span>
+  <button class="mobile-ctrl-btn history-toggle-btn" id="mobileHistoryToggle" title="History">☰</button>
+</div>
+
 <!-- MAIN APP -->
 <div class="app" id="app">
 
@@ -104,10 +113,10 @@
     </div>
 
     <div class="sidebar-footer">
-      <button class="theme-toggle" id="themeToggle" title="Toggle theme">
-        <span id="themeIcon">◑</span>
+      <button class="theme-toggle theme-toggle-btn" id="themeToggle" title="Toggle theme">
+        <span id="themeIcon" class="theme-icon-el">🌙</span>
       </button>
-      <button class="history-toggle" id="historyToggle" title="History">
+      <button class="history-toggle history-toggle-btn" id="historyToggle" title="History">
         <span>☰</span>
       </button>
     </div>
@@ -243,23 +252,33 @@
 
       <div class="fx-card">
         <div class="fx-row">
-          <div class="fx-left">
+          <button class="fx-picker" id="fx-picker-from" type="button">
             <span class="fx-flag" id="fx-flag-from">🇺🇸</span>
-            <select class="fx-sel" id="fx-from"></select>
-          </div>
-          <input class="fx-input" id="fx-amount-from" type="number" value="1" placeholder="0.00"/>
+            <span class="fx-picker-code" id="fx-code-from">USD</span>
+            <span class="fx-picker-caret">▾</span>
+          </button>
+          <input class="fx-input" id="fx-amount-from" type="text" inputmode="decimal" value="1" placeholder="0.00"/>
         </div>
         <div class="fx-divider">
           <button class="fx-swap" id="fx-swap">⇅</button>
           <span class="fx-rate-badge" id="fx-rate-badge">—</span>
         </div>
         <div class="fx-row">
-          <div class="fx-left">
+          <button class="fx-picker" id="fx-picker-to" type="button">
             <span class="fx-flag" id="fx-flag-to">🇵🇰</span>
-            <select class="fx-sel" id="fx-to"></select>
-          </div>
-          <input class="fx-input fx-output" id="fx-amount-to" type="number" readonly placeholder="0.00"/>
+            <span class="fx-picker-code" id="fx-code-to">PKR</span>
+            <span class="fx-picker-caret">▾</span>
+          </button>
+          <input class="fx-input fx-output" id="fx-amount-to" type="text" readonly placeholder="0.00"/>
         </div>
+      </div>
+
+      <div class="fx-trend-card" id="fx-trend-card">
+        <div class="fx-trend-head">
+          <span class="fx-trend-label" id="fx-trend-label">7-day trend</span>
+          <span class="fx-trend-change" id="fx-trend-change">—</span>
+        </div>
+        <canvas id="fx-trend-chart" width="100%" height="70"></canvas>
       </div>
 
       <div class="section-label">Popular Pairs</div>
@@ -268,6 +287,16 @@
       <div class="section-label" style="margin-top:20px">All Rates vs USD</div>
       <div class="rates-table" id="rates-table"></div>
     </section>
+
+    <!-- Currency search picker (shared by both from/to pickers) -->
+    <div class="fx-picker-overlay" id="fxPickerOverlay"></div>
+    <div class="fx-picker-sheet" id="fxPickerSheet">
+      <div class="fx-picker-sheet-head">
+        <input class="fx-picker-search" id="fxPickerSearch" type="text" placeholder="Search currency or country…" autocomplete="off"/>
+        <button class="fx-picker-close" id="fxPickerClose">✕</button>
+      </div>
+      <div class="fx-picker-list" id="fxPickerList"></div>
+    </div>
 
     <!-- ══ UNIT PANEL ══ -->
     <section class="panel" id="panel-unit">
@@ -528,13 +557,6 @@
   <div class="drawer-overlay" id="drawer-overlay"></div>
 
 </div><!-- end app -->
-
-<!-- Floating 3D animated orb — works on every panel, site-wide -->
-<button class="fab-orb" id="fabOrb" title="Tap for a tip">
-  <span class="fab-ring fab-ring-a"></span>
-  <span class="fab-ring fab-ring-b"></span>
-  <span class="fab-core"></span>
-</button>
 
 <script src="script.js"></script>
 </body>
