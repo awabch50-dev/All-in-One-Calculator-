@@ -1,3 +1,4 @@
+
 /* ══════════════════════════════════════════════════
    CALC X — Premium Calculator Script
    Features: 3D Intro, Multi-lang, Auto-Currency, Solar
@@ -27,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initKeyboard();
   initSidebarScrollHint();
   init3DTilt();
-  initFloatingOrb();
 });
 
 /* ── 3D INTRO CONTROLLER ───────────────────── */
@@ -137,31 +137,32 @@ function initNavigation() {
 
 /* ── THEME ─────────────────────────────────── */
 function initTheme() {
-  const btn  = document.getElementById('themeToggle');
-  const icon = document.getElementById('themeIcon');
+  const btns = document.querySelectorAll('.theme-toggle-btn');
+  const icons = document.querySelectorAll('.theme-icon-el');
   const savedTheme = localStorage.getItem('calc-theme');
   if (savedTheme === 'light') {
     isDark = false;
     document.documentElement.setAttribute('data-theme','light');
-    icon.textContent = '◐';
+    icons.forEach(i => i.textContent = '☀');
   }
-  btn.addEventListener('click', () => {
+  function toggleTheme() {
     isDark = !isDark;
-    if (isDark) { document.documentElement.removeAttribute('data-theme'); icon.textContent = '◑'; }
-    else { document.documentElement.setAttribute('data-theme','light'); icon.textContent = '◐'; }
+    if (isDark) { document.documentElement.removeAttribute('data-theme'); icons.forEach(i => i.textContent = '🌙'); }
+    else { document.documentElement.setAttribute('data-theme','light'); icons.forEach(i => i.textContent = '☀'); }
     localStorage.setItem('calc-theme', isDark ? 'dark' : 'light');
     toast(isDark ? 'Dark mode' : 'Light mode');
-  });
+  }
+  btns.forEach(btn => btn.addEventListener('click', toggleTheme));
 }
 
 /* ── LANGUAGE SWITCHER ─────────────────────── */
 function initLanguage() {
   const footer = document.querySelector('.sidebar-footer');
   const langBtn = document.createElement('button');
-  langBtn.className = 'theme-toggle';
+  langBtn.className = 'theme-toggle lang-toggle-btn';
   langBtn.id = 'langToggle';
   langBtn.title = 'Language';
-  langBtn.innerHTML = '<span id="langIcon">EN</span>';
+  langBtn.innerHTML = '<span class="lang-icon-el">EN</span>';
   footer.insertBefore(langBtn, footer.firstChild);
 
   const i18nMap = {
@@ -220,12 +221,11 @@ function initLanguage() {
   };
 
   let currentLang = localStorage.getItem('calc-lang') || 'en';
-  const langIcon = document.getElementById('langIcon');
 
   function applyLang(lang) {
     currentLang = lang;
     localStorage.setItem('calc-lang', lang);
-    langIcon.textContent = lang.toUpperCase();
+    document.querySelectorAll('.lang-icon-el').forEach(el => el.textContent = lang.toUpperCase());
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
       if (i18n[lang][key]) el.textContent = i18n[lang][key];
@@ -233,18 +233,21 @@ function initLanguage() {
     document.body.style.direction = lang === 'ur' ? 'rtl' : 'ltr';
     toast(lang === 'ur' ? 'زبان اردو میں تبدیل ہو گئی' : 'Language changed to English');
   }
-  langBtn.addEventListener('click', () => applyLang(currentLang === 'en' ? 'ur' : 'en'));
+  document.querySelectorAll('.lang-toggle-btn').forEach(btn => {
+    btn.addEventListener('click', () => applyLang(currentLang === 'en' ? 'ur' : 'en'));
+  });
   applyLang(currentLang);
 }
 
 /* ── HISTORY & TOAST ───────────────────────── */
 function initHistory() {
   const drawer = document.getElementById('history-drawer'), overlay = document.getElementById('drawer-overlay');
-  const close = document.getElementById('drawer-close'), toggle = document.getElementById('historyToggle');
+  const close = document.getElementById('drawer-close'), toggles = document.querySelectorAll('.history-toggle-btn');
   const clearAll = document.getElementById('drawer-clear-all');
   function openDrawer() { drawer.classList.add('open'); overlay.classList.add('open'); }
   function closeDrawer(){ drawer.classList.remove('open');overlay.classList.remove('open');}
-  toggle.addEventListener('click', openDrawer); close.addEventListener('click', closeDrawer); overlay.addEventListener('click', closeDrawer);
+  toggles.forEach(t => t.addEventListener('click', openDrawer));
+  close.addEventListener('click', closeDrawer); overlay.addEventListener('click', closeDrawer);
   clearAll.addEventListener('click', ()=>{ globalHistory.length=0; renderHistoryDrawer(); toast('History cleared'); });
 }
 function addToGlobalHistory(expr, result) {
@@ -404,32 +407,56 @@ const FX = {
   USD:{n:'US Dollar',f:'🇺🇸',r:1}, EUR:{n:'Euro',f:'🇪🇺',r:0.92}, GBP:{n:'British Pound',f:'🇬🇧',r:0.79},
   PKR:{n:'Pakistani Rupee',f:'🇵🇰',r:278}, INR:{n:'Indian Rupee',f:'🇮🇳',r:83}, AED:{n:'UAE Dirham',f:'🇦🇪',r:3.67},
   SAR:{n:'Saudi Riyal',f:'🇸🇦',r:3.75}, JPY:{n:'Japanese Yen',f:'🇯🇵',r:150}, CNY:{n:'Chinese Yuan',f:'🇨🇳',r:7.24},
-  CAD:{n:'Canadian Dollar',f:'🇨🇦',r:1.36}, AUD:{n:'Australian Dollar',f:'🇦🇺',r:1.52}, CHF:{n:'Swiss Franc',f:'🇨🇭',r:0.90}
+  CAD:{n:'Canadian Dollar',f:'🇨🇦',r:1.36}, AUD:{n:'Australian Dollar',f:'🇦🇺',r:1.52}, CHF:{n:'Swiss Franc',f:'🇨🇭',r:0.90},
+  BDT:{n:'Bangladeshi Taka',f:'🇧🇩',r:110}, NPR:{n:'Nepalese Rupee',f:'🇳🇵',r:133}, LKR:{n:'Sri Lankan Rupee',f:'🇱🇰',r:302},
+  QAR:{n:'Qatari Riyal',f:'🇶🇦',r:3.64}, KWD:{n:'Kuwaiti Dinar',f:'🇰🇼',r:0.31}, OMR:{n:'Omani Rial',f:'🇴🇲',r:0.38},
+  BHD:{n:'Bahraini Dinar',f:'🇧🇭',r:0.38}, TRY:{n:'Turkish Lira',f:'🇹🇷',r:33.1}, EGP:{n:'Egyptian Pound',f:'🇪🇬',r:48.6},
+  ZAR:{n:'South African Rand',f:'🇿🇦',r:18.4}, NGN:{n:'Nigerian Naira',f:'🇳🇬',r:1520}, KES:{n:'Kenyan Shilling',f:'🇰🇪',r:129},
+  RUB:{n:'Russian Ruble',f:'🇷🇺',r:90}, SEK:{n:'Swedish Krona',f:'🇸🇪',r:10.5}, NOK:{n:'Norwegian Krone',f:'🇳🇴',r:10.8},
+  DKK:{n:'Danish Krone',f:'🇩🇰',r:6.9}, PLN:{n:'Polish Zloty',f:'🇵🇱',r:3.95}, CZK:{n:'Czech Koruna',f:'🇨🇿',r:23.4},
+  HUF:{n:'Hungarian Forint',f:'🇭🇺',r:365}, RON:{n:'Romanian Leu',f:'🇷🇴',r:4.57}, THB:{n:'Thai Baht',f:'🇹🇭',r:35.8},
+  SGD:{n:'Singapore Dollar',f:'🇸🇬',r:1.34}, MYR:{n:'Malaysian Ringgit',f:'🇲🇾',r:4.47}, IDR:{n:'Indonesian Rupiah',f:'🇮🇩',r:15750},
+  PHP:{n:'Philippine Peso',f:'🇵🇭',r:57.8}, VND:{n:'Vietnamese Dong',f:'🇻🇳',r:24950}, KRW:{n:'South Korean Won',f:'🇰🇷',r:1360},
+  HKD:{n:'Hong Kong Dollar',f:'🇭🇰',r:7.81}, TWD:{n:'Taiwan Dollar',f:'🇹🇼',r:31.9}, NZD:{n:'New Zealand Dollar',f:'🇳🇿',r:1.64},
+  MXN:{n:'Mexican Peso',f:'🇲🇽',r:17.1}, BRL:{n:'Brazilian Real',f:'🇧🇷',r:5.4}, ARS:{n:'Argentine Peso',f:'🇦🇷',r:915},
+  ILS:{n:'Israeli Shekel',f:'🇮🇱',r:3.7}, JOD:{n:'Jordanian Dinar',f:'🇯🇴',r:0.71}, MAD:{n:'Moroccan Dirham',f:'🇲🇦',r:9.9},
+  UAH:{n:'Ukrainian Hryvnia',f:'🇺🇦',r:41.4}, AFN:{n:'Afghan Afghani',f:'🇦🇫',r:68}, IQD:{n:'Iraqi Dinar',f:'🇮🇶',r:1310}
 };
 const POPULAR = [['USD','PKR'],['EUR','PKR'],['GBP','PKR'],['AED','PKR'],['SAR','PKR'],['USD','EUR'],['USD','INR'],['USD','AED']];
 let fxUpdateInterval;
 
 function initCurrency() {
-  const fromSel = document.getElementById('fx-from'), toSel = document.getElementById('fx-to');
   const amtFrom = document.getElementById('fx-amount-from'), amtTo = document.getElementById('fx-amount-to');
   const flagFrom = document.getElementById('fx-flag-from'), flagTo = document.getElementById('fx-flag-to');
+  const codeFrom = document.getElementById('fx-code-from'), codeTo = document.getElementById('fx-code-to');
   const rateBadge = document.getElementById('fx-rate-badge'), status = document.getElementById('fx-status');
   const pairsGrid = document.getElementById('pairs-grid'), ratesTable = document.getElementById('rates-table');
+  const trendChange = document.getElementById('fx-trend-change'), trendLabel = document.getElementById('fx-trend-label');
+  const trendCanvas = document.getElementById('fx-trend-chart');
 
-  Object.entries(FX).forEach(([code,info])=>{
-    [fromSel,toSel].forEach(sel=>{ const o=document.createElement('option'); o.value=code; o.textContent=`${info.f} ${code} — ${info.n}`; sel.appendChild(o); });
-  });
-  fromSel.value='USD'; toSel.value='PKR';
+  let from = 'USD', to = 'PKR';
+  let trendTimer = null;
+
+  function fmtAmount(n) {
+    if (!isFinite(n)) return '0.00';
+    const abs = Math.abs(n);
+    const decimals = abs >= 100 ? 2 : abs >= 1 ? 4 : 6;
+    return n.toLocaleString('en-US', {maximumFractionDigits: decimals, minimumFractionDigits: 2});
+  }
 
   function convert(){
-    const f=fromSel.value, t=toSel.value, amt=parseFloat(amtFrom.value)||0;
-    const res=(amt/FX[f].r)*FX[t].r;
-    amtTo.value=parseFloat(res.toPrecision(8));
-    rateBadge.textContent=`1 ${f} = ${parseFloat((FX[t].r/FX[f].r).toPrecision(6))} ${t}`;
-    flagFrom.textContent=FX[f].f; flagTo.textContent=FX[t].f;
+    const amt = parseFloat(String(amtFrom.value).replace(/,/g,'')) || 0;
+    const res = (amt/FX[from].r) * FX[to].r;
+    amtTo.value = fmtAmount(res);
+    rateBadge.textContent = `1 ${from} = ${parseFloat((FX[to].r/FX[from].r).toPrecision(6))} ${to}`;
+    flagFrom.textContent = FX[from].f; flagTo.textContent = FX[to].f;
+    codeFrom.textContent = from; codeTo.textContent = to;
   }
-  fromSel.addEventListener('change',convert); toSel.addEventListener('change',convert); amtFrom.addEventListener('input',convert);
-  document.getElementById('fx-swap').addEventListener('click',()=>{ [fromSel.value,toSel.value]=[toSel.value,fromSel.value]; convert(); });
+
+  amtFrom.addEventListener('input', convert);
+  document.getElementById('fx-swap').addEventListener('click', () => {
+    [from, to] = [to, from]; convert(); loadTrend();
+  });
 
   async function fetchRates(showToast = false) {
     status.innerHTML = '<span class="live-dot fetching"></span> Fetching live rates...';
@@ -458,10 +485,10 @@ function initCurrency() {
       }
     }
   }
-  fetchRates(true);
+  fetchRates(true).then(loadTrend);
   if (fxUpdateInterval) clearInterval(fxUpdateInterval);
   fxUpdateInterval = setInterval(() => fetchRates(false), 300000);
-  document.getElementById('fx-refresh').addEventListener('click', () => fetchRates(true));
+  document.getElementById('fx-refresh').addEventListener('click', () => fetchRates(true).then(loadTrend));
 
   function buildPairs(){
     pairsGrid.innerHTML='';
@@ -469,7 +496,7 @@ function initCurrency() {
       const r=parseFloat((FX[t].r/FX[f].r).toPrecision(5));
       const d=document.createElement('div'); d.className='pair-chip';
       d.innerHTML=`<div class="pc-name">${FX[f].f} ${f} → ${t} ${FX[t].f}</div><div class="pc-rate">1 ${f} = ${r} ${t}</div>`;
-      d.addEventListener('click',()=>{ fromSel.value=f; toSel.value=t; amtFrom.value=1; convert(); });
+      d.addEventListener('click',()=>{ from=f; to=t; amtFrom.value=1; convert(); loadTrend(); });
       pairsGrid.appendChild(d);
     });
   }
@@ -479,11 +506,143 @@ function initCurrency() {
       if(c==='USD')return;
       const d=document.createElement('div'); d.className='rate-row';
       d.innerHTML=`<span class="rc">${info.f} ${c}</span><span class="rv">${parseFloat(info.r.toPrecision(6))}</span>`;
-      d.addEventListener('click',()=>{ fromSel.value='USD'; toSel.value=c; amtFrom.value=1; convert(); });
+      d.addEventListener('click',()=>{ from='USD'; to=c; amtFrom.value=1; convert(); loadTrend(); });
       ratesTable.appendChild(d);
     });
   }
+
+  /* ── 7-day trend (Google-style history graph) ── */
+  async function loadTrend() {
+    trendLabel.textContent = `${from}/${to} · 7-day trend`;
+    trendChange.textContent = '…';
+    trendChange.className = 'fx-trend-change';
+    const dates = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(); d.setDate(d.getDate() - i);
+      dates.push(d.toISOString().slice(0,10));
+    }
+    try {
+      const points = await Promise.all(dates.map(async (date) => {
+        try {
+          const res = await fetch(`https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@${date}/v1/currencies/usd.json`);
+          if (!res.ok) return null;
+          const data = await res.json();
+          const rates = data.usd;
+          const fFrom = from.toLowerCase()==='usd' ? 1 : rates[from.toLowerCase()];
+          const fTo = to.toLowerCase()==='usd' ? 1 : rates[to.toLowerCase()];
+          if (!fFrom || !fTo) return null;
+          return fTo / fFrom;
+        } catch { return null; }
+      }));
+      const clean = points.filter(p => p !== null);
+      if (clean.length < 2) { drawTrendChart(trendCanvas, [FX[to].r/FX[from].r, FX[to].r/FX[from].r]); trendChange.textContent = 'n/a'; return; }
+      drawTrendChart(trendCanvas, clean);
+      const change = ((clean[clean.length-1] - clean[0]) / clean[0]) * 100;
+      trendChange.textContent = (change >= 0 ? '▲ ' : '▼ ') + Math.abs(change).toFixed(2) + '%';
+      trendChange.classList.add(change >= 0 ? 'up' : 'down');
+    } catch {
+      trendChange.textContent = 'n/a';
+    }
+  }
+
   buildPairs(); buildRatesTable(); convert();
+  initFxPicker({
+    getFrom: () => from, setFrom: (v) => { from = v; convert(); loadTrend(); },
+    getTo: () => to, setTo: (v) => { to = v; convert(); loadTrend(); }
+  });
+}
+
+function drawTrendChart(canvas, values) {
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const cssW = canvas.clientWidth || canvas.parentElement.clientWidth || 300;
+  const cssH = 70;
+  canvas.width = cssW * dpr; canvas.height = cssH * dpr;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,cssW,cssH);
+  const min = Math.min(...values), max = Math.max(...values);
+  const range = (max - min) || (min * 0.001) || 1;
+  const pad = 6;
+  const n = values.length - 1;
+  const xFor = i => pad + (i/n) * (cssW - pad*2);
+  const yFor = v => pad + (cssH - pad*2) - ((v - min)/range) * (cssH - pad*2);
+  const up = values[values.length-1] >= values[0];
+  const color = up ? '#00e676' : '#ff4d4d';
+
+  const grad = ctx.createLinearGradient(0,0,0,cssH);
+  grad.addColorStop(0, up ? 'rgba(0,230,118,0.28)' : 'rgba(255,77,77,0.28)');
+  grad.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.beginPath(); ctx.moveTo(xFor(0), yFor(values[0]));
+  values.forEach((v,i)=> ctx.lineTo(xFor(i), yFor(v)));
+  ctx.lineTo(xFor(n), cssH-pad); ctx.lineTo(xFor(0), cssH-pad); ctx.closePath();
+  ctx.fillStyle = grad; ctx.fill();
+
+  ctx.beginPath(); ctx.moveTo(xFor(0), yFor(values[0]));
+  values.forEach((v,i)=> ctx.lineTo(xFor(i), yFor(v)));
+  ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.lineJoin='round'; ctx.stroke();
+
+  ctx.beginPath(); ctx.arc(xFor(n), yFor(values[n]), 3, 0, Math.PI*2);
+  ctx.fillStyle = color; ctx.fill();
+}
+
+/* ── Google-style searchable currency picker (shared by From/To) ── */
+function initFxPicker(ctrl) {
+  const overlay = document.getElementById('fxPickerOverlay');
+  const sheet = document.getElementById('fxPickerSheet');
+  const search = document.getElementById('fxPickerSearch');
+  const list = document.getElementById('fxPickerList');
+  const closeBtn = document.getElementById('fxPickerClose');
+  const btnFrom = document.getElementById('fx-picker-from');
+  const btnTo = document.getElementById('fx-picker-to');
+  let target = null; // 'from' | 'to'
+  let activeIdx = -1;
+
+  function open(which) {
+    target = which;
+    search.value = '';
+    renderList('');
+    overlay.classList.add('open'); sheet.classList.add('open');
+    setTimeout(() => search.focus(), 60);
+  }
+  function close() {
+    overlay.classList.remove('open'); sheet.classList.remove('open');
+    target = null;
+  }
+  function renderList(query) {
+    const q = query.trim().toLowerCase();
+    const entries = Object.entries(FX).filter(([code,info]) =>
+      !q || code.toLowerCase().includes(q) || info.n.toLowerCase().includes(q)
+    );
+    list.innerHTML = '';
+    activeIdx = -1;
+    if (!entries.length) { list.innerHTML = '<div class="fx-picker-empty">No currency found</div>'; return; }
+    entries.forEach(([code, info]) => {
+      const item = document.createElement('div'); item.className = 'fx-picker-item';
+      item.innerHTML = `<span class="fp-flag">${info.f}</span><span class="fp-code">${code}</span><span class="fp-name">${info.n}</span><span class="fp-rate">${parseFloat(info.r.toPrecision(5))}</span>`;
+      item.addEventListener('click', () => select(code));
+      list.appendChild(item);
+    });
+  }
+  function select(code) {
+    if (target === 'from') ctrl.setFrom(code);
+    else if (target === 'to') ctrl.setTo(code);
+    close();
+  }
+  btnFrom.addEventListener('click', () => open('from'));
+  btnTo.addEventListener('click', () => open('to'));
+  closeBtn.addEventListener('click', close);
+  overlay.addEventListener('click', close);
+  search.addEventListener('input', () => renderList(search.value));
+  search.addEventListener('keydown', (e) => {
+    const items = list.querySelectorAll('.fx-picker-item');
+    if (e.key === 'ArrowDown') { e.preventDefault(); activeIdx = Math.min(items.length-1, activeIdx+1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); activeIdx = Math.max(0, activeIdx-1); }
+    else if (e.key === 'Enter') { e.preventDefault(); if (items[activeIdx]) items[activeIdx].click(); return; }
+    else if (e.key === 'Escape') { close(); return; }
+    else return;
+    items.forEach((it,i)=> it.classList.toggle('kb-active', i===activeIdx));
+    if (items[activeIdx]) items[activeIdx].scrollIntoView({block:'nearest'});
+  });
 }
 
 /* ── UNIT CONVERTER ────────────────────────── */
@@ -882,30 +1041,5 @@ function init3DTilt() {
       card.style.transform = 'perspective(700px) rotateX(0deg) rotateY(0deg) translateZ(0)';
       card.classList.remove('tilt-active');
     });
-  });
-}
-
-/* ── FLOATING 3D ORB — site-wide fun element with rotating tips ── */
-const ORB_TIPS = [
-  '💡 Tip: Tap a number in your history to reuse the result instantly.',
-  '☀ Solar fact: 1 kW of panels can offset roughly 1,200–1,600 kWh per year depending on sunlight.',
-  '💰 Loan tip: Extra payments early in a loan save the most on total interest.',
-  '🧮 Try the keyboard: numbers, + − × ÷ and Enter all work on the Standard calculator.',
-  '🍽 Tip calculator: splitting a bill? Set "Split Between" before checking the per-person total.',
-  '⚖ BMI is a general screening tool — it does not account for muscle mass directly.',
-  '🌍 Currency rates auto-refresh every 5 minutes while the tab is open.',
-  '📅 Age calculator also shows days until your next birthday.',
-  '🔆 Peak sun hours is not the same as daylight hours — it is the sun\'s usable intensity per day.',
-  '🌗 Try switching themes — your choice is remembered next time you visit.',
-  '🧾 A bigger down payment or shorter loan term both cut total interest paid.',
-  '🌳 Solar panels typically pay for themselves faster in high-sunlight, high-rate regions.'
-];
-function initFloatingOrb() {
-  const orb = document.getElementById('fabOrb');
-  if (!orb) return;
-  let idx = 0;
-  orb.addEventListener('click', () => {
-    toast(ORB_TIPS[idx % ORB_TIPS.length]);
-    idx++;
   });
 }
