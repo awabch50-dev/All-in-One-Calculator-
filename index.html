@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
 <title>CALC X — Premium Calculator</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -10,6 +10,34 @@
 <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
+
+<!-- ══════════════ 3D ANIMATED INTRO ══════════════ -->
+<div class="intro" id="intro">
+  <canvas id="intro-particles"></canvas>
+  <div class="intro-stage">
+    <div class="orbit-system" id="orbitSystem">
+      <div class="sun">
+        <div class="sun-core"></div>
+        <div class="sun-flare"></div>
+      </div>
+      <div class="ring ring-1"><div class="ring-dot"></div></div>
+      <div class="ring ring-2"><div class="ring-dot gold"></div></div>
+      <div class="ring ring-3"><div class="ring-dot"></div></div>
+    </div>
+    <div class="intro-text">
+      <h1 class="intro-title">
+        <span>C</span><span>A</span><span>L</span><span>C</span>
+        <span class="intro-x">X</span>
+      </h1>
+      <p class="intro-tag">Premium Calculator Suite</p>
+    </div>
+    <div class="intro-progress-wrap">
+      <div class="intro-progress"><div class="intro-progress-fill" id="introFill"></div></div>
+      <span class="intro-pct" id="introPct">0%</span>
+    </div>
+    <button class="intro-skip" id="introSkip">Skip ▸</button>
+  </div>
+</div>
 
 <!-- Particle canvas -->
 <canvas id="particles"></canvas>
@@ -26,11 +54,15 @@
   <!-- Sidebar Navigation -->
   <nav class="sidebar" id="sidebar">
     <div class="sidebar-logo">
-      <div class="logo-mark">⌗</div>
+      <div class="logo-orb" aria-hidden="true">
+        <span class="logo-orb-core"></span>
+        <span class="logo-orb-ring"></span>
+      </div>
       <span class="logo-name">CALC<span class="logo-x">X</span></span>
     </div>
 
-    <div class="nav-items">
+    <div class="nav-items-wrap">
+    <div class="nav-items" id="navItems">
       <button class="nav-item active" data-panel="standard">
         <span class="nav-icon">◻</span>
         <span class="nav-label">Standard</span>
@@ -63,6 +95,12 @@
         <span class="nav-icon">◈</span>
         <span class="nav-label">Loan/EMI</span>
       </button>
+      <button class="nav-item" data-panel="solar">
+        <span class="nav-icon">☀</span>
+        <span class="nav-label">Solar</span>
+      </button>
+    </div>
+    <div class="scroll-hint" id="scrollHint" title="More below">⌄</div>
     </div>
 
     <div class="sidebar-footer">
@@ -75,13 +113,17 @@
     </div>
   </nav>
 
-  <!-- Mobile bottom nav -->
+  <!-- Mobile bottom nav — ALL tools visible directly, horizontally scrollable -->
   <nav class="bottom-nav" id="bottomNav">
     <button class="bnav-item active" data-panel="standard">◻<span>Std</span></button>
     <button class="bnav-item" data-panel="scientific">∑<span>Sci</span></button>
     <button class="bnav-item" data-panel="currency">₿<span>FX</span></button>
     <button class="bnav-item" data-panel="unit">⊕<span>Unit</span></button>
-    <button class="bnav-item" data-panel="bmi">♡<span>More</span></button>
+    <button class="bnav-item" data-panel="bmi">♡<span>BMI</span></button>
+    <button class="bnav-item" data-panel="tip">✦<span>Tip</span></button>
+    <button class="bnav-item" data-panel="age">◷<span>Age</span></button>
+    <button class="bnav-item" data-panel="loan">◈<span>Loan</span></button>
+    <button class="bnav-item" data-panel="solar">☀<span>Solar</span></button>
   </nav>
 
   <!-- Main Content -->
@@ -153,43 +195,36 @@
       <div class="history-bar" id="sci-hist-bar"></div>
 
       <div class="keypad sci-keypad">
-        <!-- Sci row 1 -->
         <button class="k k-sci" data-sci="sin">sin</button>
         <button class="k k-sci" data-sci="cos">cos</button>
         <button class="k k-sci" data-sci="tan">tan</button>
         <button class="k k-sci" data-sci="log">log</button>
         <button class="k k-sci" data-sci="ln">ln</button>
-        <!-- row 2 -->
         <button class="k k-sci" data-sci="sqrt">√</button>
         <button class="k k-sci" data-sci="cbrt">∛</button>
         <button class="k k-sci" data-sci="sq">x²</button>
         <button class="k k-sci" data-sci="pow">xʸ</button>
         <button class="k k-sci" data-sci="exp">eˣ</button>
-        <!-- row 3 -->
         <button class="k k-sci" data-sci="pi">π</button>
         <button class="k k-sci" data-sci="e">e</button>
         <button class="k k-sci" data-sci="abs">|x|</button>
         <button class="k k-sci" data-sci="inv">1/x</button>
         <button class="k k-sci" data-sci="fact">n!</button>
-        <!-- row 4: num -->
         <button class="k k-fn" data-a="clear">AC</button>
         <button class="k k-fn" data-a="sign">+/−</button>
         <button class="k k-fn" data-a="bksp">⌫</button>
         <button class="k k-fn" data-a="percent">%</button>
         <button class="k k-op" data-o="÷">÷</button>
-
         <button class="k k-num" data-n="7">7</button>
         <button class="k k-num" data-n="8">8</button>
         <button class="k k-num" data-n="9">9</button>
         <button class="k k-op" data-o="×">×</button>
         <button class="k k-op" data-o="−">−</button>
-
         <button class="k k-num" data-n="4">4</button>
         <button class="k k-num" data-n="5">5</button>
         <button class="k k-num" data-n="6">6</button>
         <button class="k k-op" data-o="+">+</button>
         <button class="k k-sci" data-sci="mod">mod</button>
-
         <button class="k k-num" data-n="1">1</button>
         <button class="k k-num" data-n="2">2</button>
         <button class="k k-num" data-n="3">3</button>
@@ -394,6 +429,89 @@
       </div>
     </section>
 
+    <!-- ══ SOLAR PANEL ══ -->
+    <section class="panel" id="panel-solar">
+      <div class="panel-header">
+        <h1 class="panel-title">Solar Calculator</h1>
+        <div class="header-pills">
+          <span class="pill">☀ Full System</span>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="field-wrap">
+          <label>Location (peak sun hours/day)</label>
+          <select class="unit-sel solar-sel" id="solar-city"></select>
+        </div>
+
+        <div class="input-group" id="solar-custom-wrap">
+          <div class="field-wrap">
+            <label>Peak Sun Hours (auto)</label>
+            <input class="tool-input" id="solar-sun-hours" type="number" step="0.1" value="5.5"/>
+          </div>
+          <div class="field-wrap">
+            <label>Panel Wattage (W)</label>
+            <input class="tool-input" id="solar-panel-watt" type="number" value="400"/>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <div class="field-wrap">
+            <label>Monthly Electricity Bill ($)</label>
+            <input class="tool-input" id="solar-bill" type="number" value="150"/>
+          </div>
+          <div class="field-wrap">
+            <label>Rate ($/kWh)</label>
+            <input class="tool-input" id="solar-rate" type="number" step="0.01" value="0.15"/>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <div class="field-wrap">
+            <label>Available Roof Area (sq ft)</label>
+            <input class="tool-input" id="solar-roof" type="number" value="600"/>
+          </div>
+          <div class="field-wrap">
+            <label>Install Cost ($/Watt)</label>
+            <input class="tool-input" id="solar-cost-watt" type="number" step="0.1" value="3.0"/>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <div class="field-wrap">
+            <label>System Losses (%)</label>
+            <input class="tool-input" id="solar-losses" type="number" value="20"/>
+          </div>
+          <div class="field-wrap">
+            <label>Tax Credit / Incentive (%)</label>
+            <input class="tool-input" id="solar-incentive" type="number" value="30"/>
+          </div>
+        </div>
+
+        <div class="field-wrap">
+          <label>Annual Utility Price Increase (%)</label>
+          <input class="tool-input" id="solar-inflation" type="number" step="0.1" value="3"/>
+        </div>
+
+        <button class="calc-btn" id="solar-calc-btn">☀ Calculate My Solar System</button>
+
+        <div class="result-display" id="solar-result-display">
+          <div class="big-result" id="solar-size">—</div>
+          <div class="result-label">Recommended System Size</div>
+
+          <div class="solar-grid" id="solar-grid"></div>
+
+          <div class="solar-warning" id="solar-roof-warning"></div>
+
+          <div class="section-label" style="margin-top:22px">25-Year Cost vs. Savings</div>
+          <div class="loan-chart-wrap solar-chart-wrap">
+            <canvas id="solar-chart" width="100%" height="220"></canvas>
+          </div>
+          <div class="solar-legend" id="solar-legend"></div>
+        </div>
+      </div>
+    </section>
+
   </main><!-- end main-content -->
 
   <!-- History Drawer -->
@@ -410,6 +528,13 @@
   <div class="drawer-overlay" id="drawer-overlay"></div>
 
 </div><!-- end app -->
+
+<!-- Floating 3D animated orb — works on every panel, site-wide -->
+<button class="fab-orb" id="fabOrb" title="Tap for a tip">
+  <span class="fab-ring fab-ring-a"></span>
+  <span class="fab-ring fab-ring-b"></span>
+  <span class="fab-core"></span>
+</button>
 
 <script src="script.js"></script>
 </body>
