@@ -72,12 +72,21 @@ function initIntro() {
 function initParticles() {
   const canvas = document.getElementById('particles');
   const ctx = canvas.getContext('2d');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let W, H, pts;
+  let lastFrame = 0;
+  const frameInterval = 1000 / 30; // cap at ~30fps — smoother on non-Chromium engines than uncapped rAF
+
   function resize() {
     W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight;
-    pts = Array.from({length: 60}, () => ({ x: Math.random()*W, y: Math.random()*H, vx:(Math.random()-.5)*.3, vy:(Math.random()-.5)*.3, r: Math.random()*1.5+.5, a: Math.random() }));
+    const count = window.innerWidth < 768 ? 22 : 34;
+    pts = Array.from({length: count}, () => ({ x: Math.random()*W, y: Math.random()*H, vx:(Math.random()-.5)*.3, vy:(Math.random()-.5)*.3, r: Math.random()*1.5+.5, a: Math.random() }));
   }
-  function draw() {
+  function draw(ts) {
+    requestAnimationFrame(draw);
+    if (document.hidden) return;
+    if (ts - lastFrame < frameInterval) return;
+    lastFrame = ts;
     ctx.clearRect(0,0,W,H);
     const isDarkTheme = !document.documentElement.dataset.theme;
     pts.forEach(p => {
@@ -87,42 +96,51 @@ function initParticles() {
       ctx.fillStyle = isDarkTheme ? `rgba(0,212,255,${p.a*0.5})` : `rgba(0,100,200,${p.a*0.25})`;
       ctx.fill();
     });
-    pts.forEach((a,i) => {
-      pts.slice(i+1).forEach(b => {
+    for (let i = 0; i < pts.length; i++) {
+      for (let j = i+1; j < pts.length; j++) {
+        const a = pts[i], b = pts[j];
         const d = Math.hypot(a.x-b.x, a.y-b.y);
-        if (d < 100) {
+        if (d < 90) {
           ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
-          const alpha = (1-d/100)*0.12;
+          const alpha = (1-d/90)*0.12;
           ctx.strokeStyle = isDarkTheme ? `rgba(0,212,255,${alpha})` : `rgba(0,100,200,${alpha*0.5})`;
           ctx.lineWidth = .5; ctx.stroke();
         }
-      });
-    });
-    requestAnimationFrame(draw);
+      }
+    }
   }
-  window.addEventListener('resize', resize); resize(); draw();
+  window.addEventListener('resize', resize);
+  resize();
+  if (!reduceMotion) requestAnimationFrame(draw); else ctx.clearRect(0,0,W,H);
 
   // Lightweight duplicate for intro screen
   const introCanvas = document.getElementById('intro-particles');
-  if (introCanvas) {
+  if (introCanvas && !reduceMotion) {
     const ictx = introCanvas.getContext('2d');
-    let iW, iH, ipts;
-    function iresize(){ iW=introCanvas.width=window.innerWidth; iH=introCanvas.height=window.innerHeight; ipts=Array.from({length:40},()=>({x:Math.random()*iW,y:Math.random()*iH,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:Math.random()*1.4+.4,a:Math.random()})); }
-    function idraw(){
+    let iW, iH, ipts, iLast = 0;
+    function iresize(){ iW=introCanvas.width=window.innerWidth; iH=introCanvas.height=window.innerHeight; const c = window.innerWidth < 768 ? 14 : 22; ipts=Array.from({length:c},()=>({x:Math.random()*iW,y:Math.random()*iH,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:Math.random()*1.4+.4,a:Math.random()})); }
+    function idraw(ts){
       if (!document.body.contains(introCanvas)) return;
+      requestAnimationFrame(idraw);
+      if (document.hidden) return;
+      if (ts - iLast < frameInterval) return;
+      iLast = ts;
       ictx.clearRect(0,0,iW,iH);
       ipts.forEach(p=>{ p.x+=p.vx;p.y+=p.vy; if(p.x<0)p.x=iW; if(p.x>iW)p.x=0; if(p.y<0)p.y=iH; if(p.y>iH)p.y=0; ictx.beginPath(); ictx.arc(p.x,p.y,p.r,0,Math.PI*2); ictx.fillStyle=`rgba(0,212,255,${p.a*0.4})`; ictx.fill(); });
-      requestAnimationFrame(idraw);
     }
-    window.addEventListener('resize', iresize); iresize(); idraw();
+    window.addEventListener('resize', iresize); iresize(); requestAnimationFrame(idraw);
   }
 }
 
 function initCursorGlow() {
   const glow = document.getElementById('cursor-glow');
-  let mx=0, my=0, cx=0, cy=0;
-  document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
-  (function animate(){ cx += (mx-cx)*.08; cy += (my-cy)*.08; glow.style.left = cx+'px'; glow.style.top = cy+'px'; requestAnimationFrame(animate); })();
+  const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (!canHover) { glow.style.display = 'none'; return; } // skip entirely on touch — avoids a perpetual loop mobile never benefits from
+  glow.style.transition = 'left 0.12s ease-out, top 0.12s ease-out';
+  document.addEventListener('mousemove', e => {
+    glow.style.left = e.clientX + 'px';
+    glow.style.top = e.clientY + 'px';
+  }, { passive: true });
 }
 
 /* ── NAVIGATION (all panels reachable directly) ─── */
@@ -131,6 +149,7 @@ function initNavigation() {
     document.querySelectorAll('.nav-item,.bnav-item').forEach(b=> b.classList.toggle('active', b.dataset.panel===name));
     document.querySelectorAll('.panel').forEach(p=> p.classList.toggle('active', p.id==='panel-'+name));
     document.querySelector('.main-content').scrollTo({top:0,behavior:'smooth'});
+    if (window._onPanelOpen) window._onPanelOpen(name);
   }
   document.querySelectorAll('.nav-item,.bnav-item').forEach(btn => btn.addEventListener('click', ()=> switchPanel(btn.dataset.panel)));
 }
@@ -485,10 +504,20 @@ function initCurrency() {
       }
     }
   }
-  fetchRates(true).then(loadTrend);
-  if (fxUpdateInterval) clearInterval(fxUpdateInterval);
-  fxUpdateInterval = setInterval(() => fetchRates(false), 300000);
   document.getElementById('fx-refresh').addEventListener('click', () => fetchRates(true).then(loadTrend));
+
+  // Lazy-start: only hit the network once the person actually opens Currency (lighter first load everywhere)
+  let started = false;
+  const prevOnOpen = window._onPanelOpen;
+  window._onPanelOpen = (name) => {
+    if (prevOnOpen) prevOnOpen(name);
+    if (name === 'currency' && !started) {
+      started = true;
+      fetchRates(true).then(loadTrend);
+      if (fxUpdateInterval) clearInterval(fxUpdateInterval);
+      fxUpdateInterval = setInterval(() => fetchRates(false), 300000);
+    }
+  };
 
   function buildPairs(){
     pairsGrid.innerHTML='';
@@ -512,7 +541,10 @@ function initCurrency() {
   }
 
   /* ── 7-day trend (Google-style history graph) ── */
+  let trendReqId = 0;
   async function loadTrend() {
+    const myReq = ++trendReqId;
+    const pairFrom = from, pairTo = to;
     trendLabel.textContent = `${from}/${to} · 7-day trend`;
     trendChange.textContent = '…';
     trendChange.className = 'fx-trend-change';
@@ -528,12 +560,13 @@ function initCurrency() {
           if (!res.ok) return null;
           const data = await res.json();
           const rates = data.usd;
-          const fFrom = from.toLowerCase()==='usd' ? 1 : rates[from.toLowerCase()];
-          const fTo = to.toLowerCase()==='usd' ? 1 : rates[to.toLowerCase()];
+          const fFrom = pairFrom.toLowerCase()==='usd' ? 1 : rates[pairFrom.toLowerCase()];
+          const fTo = pairTo.toLowerCase()==='usd' ? 1 : rates[pairTo.toLowerCase()];
           if (!fFrom || !fTo) return null;
           return fTo / fFrom;
         } catch { return null; }
       }));
+      if (myReq !== trendReqId) return; // a newer pair was selected while this was in flight — discard
       const clean = points.filter(p => p !== null);
       if (clean.length < 2) { drawTrendChart(trendCanvas, [FX[to].r/FX[from].r, FX[to].r/FX[from].r]); trendChange.textContent = 'n/a'; return; }
       drawTrendChart(trendCanvas, clean);
