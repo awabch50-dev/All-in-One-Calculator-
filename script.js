@@ -184,16 +184,8 @@ function initLanguage() {
   langBtn.innerHTML = '<span class="lang-icon-el">EN</span>';
   footer.insertBefore(langBtn, footer.firstChild);
 
+  // Elements without an inline data-i18n attribute in the HTML (matched by selector instead)
   const i18nMap = {
-    '.nav-item[data-panel="standard"] .nav-label': 'nav-standard',
-    '.nav-item[data-panel="scientific"] .nav-label': 'nav-scientific',
-    '.nav-item[data-panel="currency"] .nav-label': 'nav-currency',
-    '.nav-item[data-panel="unit"] .nav-label': 'nav-unit',
-    '.nav-item[data-panel="bmi"] .nav-label': 'nav-bmi',
-    '.nav-item[data-panel="tip"] .nav-label': 'nav-tip',
-    '.nav-item[data-panel="age"] .nav-label': 'nav-age',
-    '.nav-item[data-panel="loan"] .nav-label': 'nav-loan',
-    '.nav-item[data-panel="solar"] .nav-label': 'nav-solar',
     '#panel-standard .panel-title': 'title-standard',
     '#panel-scientific .panel-title': 'title-scientific',
     '#panel-currency .panel-title': 'title-currency',
@@ -203,58 +195,128 @@ function initLanguage() {
     '#panel-age .panel-title': 'title-age',
     '#panel-loan .panel-title': 'title-loan',
     '#panel-solar .panel-title': 'title-solar',
-    '#std-clear-hist': 'clear-history',
-    '#fx-refresh': 'refresh-rates',
-    '#bmi-calc-btn': 'bmi-calc',
-    '#age-calc-btn': 'age-calc',
-    '#loan-calc-btn': 'loan-calc',
     '.drawer-header h2': 'history-title',
     '#drawer-clear-all': 'clear-all',
     '.drawer-empty': 'no-history'
   };
   for (const [sel, key] of Object.entries(i18nMap)) {
-    document.querySelectorAll(sel).forEach(el => el.setAttribute('data-i18n', key));
+    document.querySelectorAll(sel).forEach(el => { if (!el.hasAttribute('data-i18n')) el.setAttribute('data-i18n', key); });
   }
 
   const i18n = {
     en: {
       'nav-standard': 'Standard', 'nav-scientific': 'Scientific', 'nav-currency': 'Currency',
       'nav-unit': 'Units', 'nav-bmi': 'BMI', 'nav-tip': 'Tip', 'nav-age': 'Age', 'nav-loan': 'Loan/EMI', 'nav-solar': 'Solar',
+      'bnav-std': 'Std', 'bnav-sci': 'Sci', 'bnav-fx': 'FX', 'bnav-unit': 'Unit', 'bnav-loan': 'Loan',
       'title-standard': 'Calculator', 'title-scientific': 'Scientific', 'title-currency': 'Currency',
       'title-unit': 'Unit Converter', 'title-bmi': 'BMI Calculator', 'title-tip': 'Tip Calculator',
       'title-age': 'Age Calculator', 'title-loan': 'Loan / EMI', 'title-solar': 'Solar Calculator',
-      'clear-history': 'Clear History', 'refresh-rates': '↻ Live Rates',
-      'bmi-calc': 'Calculate BMI', 'age-calc': 'Calculate Age', 'loan-calc': 'Calculate EMI',
+      'deg-label': 'DEG', 'clear-history': 'Clear History', 'refresh-rates': '↻ Live Rates',
+      'fx-status-default': 'Reference rates · Tap ↻ for live', 'fx-trend-default': '7-day trend',
+      'fx-fetching': 'Fetching live rates...', 'fx-live-updated': 'Live · Updated', 'fx-offline': 'Offline · Using cached rates',
+      'fx-search-placeholder': 'Search currency or country…', 'fx-no-results': 'No currency found',
+      'section-popular-pairs': 'Popular Pairs', 'section-all-rates': 'All Rates vs USD',
+      'ucat-length': '📏 Length', 'ucat-weight': '⚖️ Weight', 'ucat-temp': '🌡️ Temp', 'ucat-area': '🟦 Area',
+      'ucat-speed': '🚀 Speed', 'ucat-data': '💾 Data', 'ucat-time': '⏱ Time', 'ucat-energy': '⚡ Energy',
+      'ucat-pressure': '🌀 Pressure', 'ucat-volume': '🧪 Volume',
+      'bmi-calc': 'Calculate BMI', 'bmi-metric': 'Metric', 'bmi-imperial': 'Imperial',
+      'lbl-height-cm': 'Height (cm)', 'lbl-weight-kg': 'Weight (kg)', 'lbl-height-ft': 'Height (ft)', 'lbl-weight-lbs': 'Weight (lbs)',
+      'bmi-enter-values': 'Enter values above', 'bmi-underweight': 'Underweight', 'bmi-normal': 'Normal', 'bmi-overweight': 'Overweight', 'bmi-obese': 'Obese',
+      'bmi-ideal-text': 'Healthy weight range for your height: {min}–{max} kg',
+      'lbl-bill-amount': 'Bill Amount ($)', 'lbl-tip-pct': 'Tip Percentage', 'lbl-split-between': 'Split Between',
+      'tip-row-amount': 'Tip Amount', 'tip-row-total': 'Total Bill', 'tip-row-per': 'Per Person',
+      'lbl-dob': 'Date of Birth', 'lbl-calc-until': 'Calculate Until', 'age-calc': 'Calculate Age',
+      'age-lbl-years': 'Years', 'age-lbl-months': 'Months', 'age-lbl-days': 'Days',
+      'age-lbl-weeks': 'Weeks', 'age-lbl-months-total': 'Months Total', 'age-lbl-days-total': 'Days Total',
+      'age-happy-birthday': '🎂 Happy Birthday!', 'age-days-to-birthday': '🎂 {n} day(s) until next birthday',
+      'lbl-loan-amount': 'Loan Amount ($)', 'lbl-interest-rate': 'Annual Interest Rate (%)', 'lbl-loan-term': 'Loan Term (Years)',
+      'loan-calc': 'Calculate EMI', 'loan-monthly-emi': 'Monthly EMI',
+      'loan-lbl-principal': 'Principal', 'loan-lbl-interest': 'Total Interest', 'loan-lbl-total-payment': 'Total Payment', 'loan-lbl-term': 'Loan Term',
+      'solar-full-system': '☀ Full System', 'lbl-solar-location': 'Location (peak sun hours/day)',
+      'lbl-peak-sun': 'Peak Sun Hours (auto)', 'lbl-panel-watt': 'Panel Wattage (W)',
+      'lbl-monthly-bill': 'Monthly Electricity Bill ($)', 'lbl-rate-kwh': 'Rate ($/kWh)',
+      'lbl-roof-area': 'Available Roof Area (sq ft)', 'lbl-install-cost': 'Install Cost ($/Watt)',
+      'lbl-sys-losses': 'System Losses (%)', 'lbl-tax-credit': 'Tax Credit / Incentive (%)',
+      'lbl-utility-increase': 'Annual Utility Price Increase (%)', 'solar-calc-btn': '☀ Calculate My Solar System',
+      'solar-result-label': 'Recommended System Size', 'section-solar-trend': '25-Year Cost vs. Savings',
+      'solar-lbl-panels': 'Panels Needed', 'solar-lbl-roof-needed': 'Roof Area Needed', 'solar-lbl-gross-cost': 'System Cost (gross)',
+      'solar-lbl-net-cost': 'Cost After Incentive', 'solar-lbl-monthly-savings': 'Monthly Savings', 'solar-lbl-payback': 'Payback Period',
+      'solar-lbl-net25': '25-Yr Net Savings', 'solar-lbl-co2': 'CO₂ Offset / yr', 'solar-lbl-trees': 'Equivalent Trees',
+      'solar-legend-cost': 'Net cost invested', 'solar-legend-savings': 'Cumulative savings', 'solar-legend-breakeven': 'Break-even',
+      'solar-roof-warning': '⚠ You need ~{need} sq ft of roof space but only {avail} sq ft is available. Consider higher-wattage panels or a smaller system.',
       'history-title': 'History', 'clear-all': 'Clear All', 'no-history': 'No calculations yet.'
     },
     ur: {
       'nav-standard': 'معیاری', 'nav-scientific': 'سائنسی', 'nav-currency': 'کرنسی',
       'nav-unit': 'یونٹس', 'nav-bmi': 'بی ایم آئی', 'nav-tip': 'ٹپ', 'nav-age': 'عمر', 'nav-loan': 'قرضہ', 'nav-solar': 'سولر',
-      'title-standard': 'کیلکولیٹر', 'title-scientific': 'سائنسی', 'title-currency': 'کرنسی',
-      'title-unit': 'یونٹ کنورٹر', 'title-bmi': 'بی ایم آئی', 'title-tip': 'ٹپ کیلکولیٹر',
+      'bnav-std': 'سادہ', 'bnav-sci': 'سائنسی', 'bnav-fx': 'کرنسی', 'bnav-unit': 'یونٹ', 'bnav-loan': 'قرضہ',
+      'title-standard': 'کیلکولیٹر', 'title-scientific': 'سائنسی کیلکولیٹر', 'title-currency': 'کرنسی کنورٹر',
+      'title-unit': 'یونٹ کنورٹر', 'title-bmi': 'بی ایم آئی کیلکولیٹر', 'title-tip': 'ٹپ کیلکولیٹر',
       'title-age': 'عمر کیلکولیٹر', 'title-loan': 'قرضہ / ای ایم آئی', 'title-solar': 'سولر کیلکولیٹر',
-      'clear-history': 'ہسٹری صاف کریں', 'refresh-rates': '↻ لائیو ریٹس',
-      'bmi-calc': 'حساب کریں', 'age-calc': 'حساب کریں', 'loan-calc': 'حساب کریں',
+      'deg-label': 'ڈگری', 'clear-history': 'ہسٹری صاف کریں', 'refresh-rates': '↻ لائیو ریٹس',
+      'fx-status-default': 'حوالہ ریٹس · لائیو کے لیے ↻ دبائیں', 'fx-trend-default': '7 دن کا رجحان',
+      'fx-fetching': 'لائیو ریٹس حاصل کیے جا رہے ہیں...', 'fx-live-updated': 'لائیو · اپڈیٹ ہوا', 'fx-offline': 'آف لائن · محفوظ شدہ ریٹس استعمال ہو رہے ہیں',
+      'fx-search-placeholder': 'کرنسی یا ملک تلاش کریں…', 'fx-no-results': 'کوئی کرنسی نہیں ملی',
+      'section-popular-pairs': 'مقبول جوڑے', 'section-all-rates': 'یو ایس ڈی کے مقابلے تمام ریٹس',
+      'ucat-length': '📏 لمبائی', 'ucat-weight': '⚖️ وزن', 'ucat-temp': '🌡️ درجہ حرارت', 'ucat-area': '🟦 رقبہ',
+      'ucat-speed': '🚀 رفتار', 'ucat-data': '💾 ڈیٹا', 'ucat-time': '⏱ وقت', 'ucat-energy': '⚡ توانائی',
+      'ucat-pressure': '🌀 دباؤ', 'ucat-volume': '🧪 حجم',
+      'bmi-calc': 'بی ایم آئی حساب کریں', 'bmi-metric': 'میٹرک', 'bmi-imperial': 'امپیریل',
+      'lbl-height-cm': 'قد (سینٹی میٹر)', 'lbl-weight-kg': 'وزن (کلوگرام)', 'lbl-height-ft': 'قد (فٹ)', 'lbl-weight-lbs': 'وزن (پاؤنڈ)',
+      'bmi-enter-values': 'اوپر ویلیوز درج کریں', 'bmi-underweight': 'کم وزن', 'bmi-normal': 'نارمل', 'bmi-overweight': 'زیادہ وزن', 'bmi-obese': 'موٹاپا',
+      'bmi-ideal-text': 'آپ کے قد کے لیے صحت مند وزن: {min}–{max} کلوگرام',
+      'lbl-bill-amount': 'بل کی رقم ($)', 'lbl-tip-pct': 'ٹپ فیصد', 'lbl-split-between': 'کتنے لوگوں میں تقسیم',
+      'tip-row-amount': 'ٹپ کی رقم', 'tip-row-total': 'کل بل', 'tip-row-per': 'فی شخص',
+      'lbl-dob': 'تاریخ پیدائش', 'lbl-calc-until': 'اس تاریخ تک حساب کریں', 'age-calc': 'عمر کا حساب کریں',
+      'age-lbl-years': 'سال', 'age-lbl-months': 'مہینے', 'age-lbl-days': 'دن',
+      'age-lbl-weeks': 'ہفتے', 'age-lbl-months-total': 'کل مہینے', 'age-lbl-days-total': 'کل دن',
+      'age-happy-birthday': '🎂 سالگرہ مبارک!', 'age-days-to-birthday': '🎂 اگلی سالگرہ میں {n} دن باقی ہیں',
+      'lbl-loan-amount': 'قرضے کی رقم ($)', 'lbl-interest-rate': 'سالانہ شرح سود (%)', 'lbl-loan-term': 'قرضے کی مدت (سال)',
+      'loan-calc': 'ای ایم آئی حساب کریں', 'loan-monthly-emi': 'ماہانہ ای ایم آئی',
+      'loan-lbl-principal': 'اصل رقم', 'loan-lbl-interest': 'کل سود', 'loan-lbl-total-payment': 'کل ادائیگی', 'loan-lbl-term': 'قرضے کی مدت',
+      'solar-full-system': '☀ مکمل سسٹم', 'lbl-solar-location': 'مقام (یومیہ دھوپ کے اوقات)',
+      'lbl-peak-sun': 'دھوپ کے اوقات (خودکار)', 'lbl-panel-watt': 'پینل واٹج (W)',
+      'lbl-monthly-bill': 'ماہانہ بجلی کا بل ($)', 'lbl-rate-kwh': 'ریٹ ($/kWh)',
+      'lbl-roof-area': 'دستیاب چھت کا رقبہ (sq ft)', 'lbl-install-cost': 'تنصیب کی لاگت ($/Watt)',
+      'lbl-sys-losses': 'سسٹم نقصانات (%)', 'lbl-tax-credit': 'ٹیکس چھوٹ / مراعات (%)',
+      'lbl-utility-increase': 'سالانہ بجلی قیمت اضافہ (%)', 'solar-calc-btn': '☀ میرا سولر سسٹم حساب کریں',
+      'solar-result-label': 'تجویز کردہ سسٹم سائز', 'section-solar-trend': '25 سالہ لاگت بمقابلہ بچت',
+      'solar-lbl-panels': 'درکار پینلز', 'solar-lbl-roof-needed': 'درکار چھت کا رقبہ', 'solar-lbl-gross-cost': 'سسٹم لاگت (کل)',
+      'solar-lbl-net-cost': 'مراعات کے بعد لاگت', 'solar-lbl-monthly-savings': 'ماہانہ بچت', 'solar-lbl-payback': 'واپسی مدت',
+      'solar-lbl-net25': '25 سالہ خالص بچت', 'solar-lbl-co2': 'سالانہ CO₂ کمی', 'solar-lbl-trees': 'درختوں کے برابر',
+      'solar-legend-cost': 'خرچ کی گئی رقم', 'solar-legend-savings': 'مجموعی بچت', 'solar-legend-breakeven': 'برابری کا نقطہ',
+      'solar-roof-warning': '⚠ آپ کو تقریباً {need} sq ft چھت درکار ہے لیکن صرف {avail} sq ft دستیاب ہے۔ زیادہ واٹج والے پینلز یا چھوٹا سسٹم غور کریں۔',
       'history-title': 'ہسٹری', 'clear-all': 'سب صاف کریں', 'no-history': 'ابھی تک کوئی حساب نہیں۔'
     }
   };
 
   let currentLang = localStorage.getItem('calc-lang') || 'en';
+  window.I18N = i18n;
 
   function applyLang(lang) {
     currentLang = lang;
+    window.currentLang = lang;
     localStorage.setItem('calc-lang', lang);
     document.querySelectorAll('.lang-icon-el').forEach(el => el.textContent = lang.toUpperCase());
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
       if (i18n[lang][key]) el.textContent = i18n[lang][key];
     });
-    document.body.style.direction = lang === 'ur' ? 'rtl' : 'ltr';
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      if (i18n[lang][key]) el.placeholder = i18n[lang][key];
+    });
+    // Note: layout direction intentionally stays LTR even in Urdu — this app mixes numbers,
+    // currency codes and formulas throughout, and forcing RTL on the whole page scrambles
+    // that mixed content. Urdu script still renders correctly without a page-wide RTL flip.
+    document.documentElement.lang = lang;
     toast(lang === 'ur' ? 'زبان اردو میں تبدیل ہو گئی' : 'Language changed to English');
+    window.dispatchEvent(new CustomEvent('langchange', { detail: { lang } }));
   }
   document.querySelectorAll('.lang-toggle-btn').forEach(btn => {
     btn.addEventListener('click', () => applyLang(currentLang === 'en' ? 'ur' : 'en'));
   });
+  window.t = (key) => (i18n[window.currentLang || currentLang] && i18n[window.currentLang || currentLang][key]) || i18n.en[key] || key;
   applyLang(currentLang);
 }
 
@@ -478,14 +540,14 @@ function initCurrency() {
   });
 
   async function fetchRates(showToast = false) {
-    status.innerHTML = '<span class="live-dot fetching"></span> Fetching live rates...';
+    status.innerHTML = `<span class="live-dot fetching"></span> ${window.t('fx-fetching')}`;
     try {
       const res = await fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json');
       if (!res.ok) throw new Error('Primary API failed');
       const data = await res.json();
       const rates = data.usd;
       Object.keys(FX).forEach(c => { const code = c.toLowerCase(); if (rates[code]) FX[c].r = rates[code]; });
-      status.innerHTML = `<span class="live-dot"></span> Live · Updated ${new Date().toLocaleTimeString()}`;
+      status.innerHTML = `<span class="live-dot"></span> ${window.t('fx-live-updated')} ${new Date().toLocaleTimeString()}`;
       convert(); buildRatesTable(); buildPairs();
       if (showToast) toast('Live rates updated!');
     } catch (e) {
@@ -494,12 +556,12 @@ function initCurrency() {
         if(res2.ok) {
           const data2 = await res2.json();
           Object.keys(FX).forEach(c => { if (data2.rates[c]) FX[c].r = data2.rates[c]; });
-          status.innerHTML = `<span class="live-dot"></span> Live · Updated ${new Date().toLocaleTimeString()}`;
+          status.innerHTML = `<span class="live-dot"></span> ${window.t('fx-live-updated')} ${new Date().toLocaleTimeString()}`;
           convert(); buildRatesTable(); buildPairs();
           if (showToast) toast('Rates updated!');
         } else throw new Error();
       } catch {
-        status.innerHTML = '<span class="live-dot error"></span> Offline · Using cached rates';
+        status.innerHTML = `<span class="live-dot error"></span> ${window.t('fx-offline')}`;
         if (showToast) toast('Network error. Using cached rates.');
       }
     }
@@ -545,7 +607,7 @@ function initCurrency() {
   async function loadTrend() {
     const myReq = ++trendReqId;
     const pairFrom = from, pairTo = to;
-    trendLabel.textContent = `${from}/${to} · 7-day trend`;
+    trendLabel.textContent = `${from}/${to} · ${window.t('fx-trend-default')}`;
     trendChange.textContent = '…';
     trendChange.className = 'fx-trend-change';
     const dates = [];
@@ -648,7 +710,7 @@ function initFxPicker(ctrl) {
     );
     list.innerHTML = '';
     activeIdx = -1;
-    if (!entries.length) { list.innerHTML = '<div class="fx-picker-empty">No currency found</div>'; return; }
+    if (!entries.length) { list.innerHTML = `<div class="fx-picker-empty">${window.t('fx-no-results')}</div>`; return; }
     entries.forEach(([code, info]) => {
       const item = document.createElement('div'); item.className = 'fx-picker-item';
       item.innerHTML = `<span class="fp-flag">${info.f}</span><span class="fp-code">${code}</span><span class="fp-name">${info.n}</span><span class="fp-rate">${parseFloat(info.r.toPrecision(5))}</span>`;
@@ -704,7 +766,14 @@ function initBMI() {
   let isMetric=true;
   metricBtn.addEventListener('click',()=>{ isMetric=true; metricBtn.classList.add('active'); imperialBtn.classList.remove('active'); document.getElementById('bmi-inputs-metric').classList.remove('hidden'); document.getElementById('bmi-inputs-imperial').classList.add('hidden'); });
   imperialBtn.addEventListener('click',()=>{ isMetric=false; imperialBtn.classList.add('active'); metricBtn.classList.remove('active'); document.getElementById('bmi-inputs-imperial').classList.remove('hidden'); document.getElementById('bmi-inputs-metric').classList.add('hidden'); });
-  const cats=[{label:'Underweight',max:18.5,color:'#00cfff'},{label:'Normal',max:25,color:'#00e676'},{label:'Overweight',max:30,color:'#ffaa00'},{label:'Obese',max:Infinity,color:'#ff4d4d'}];
+  const cats=[{key:'bmi-underweight',max:18.5,color:'#00cfff'},{key:'bmi-normal',max:25,color:'#00e676'},{key:'bmi-overweight',max:30,color:'#ffaa00'},{key:'bmi-obese',max:Infinity,color:'#ff4d4d'}];
+  let lastResult = null;
+  function render() {
+    if (!lastResult) return;
+    const { bmi, catKey, catColor, idealMin, idealMax } = lastResult;
+    catEl.textContent = window.t(catKey); catEl.style.color = catColor;
+    idealEl.textContent = window.t('bmi-ideal-text').replace('{min}', idealMin).replace('{max}', idealMax);
+  }
   calcBtn.addEventListener('click',()=>{
     let h,w,bmi;
     if(isMetric){
@@ -718,15 +787,16 @@ function initBMI() {
     bmi=w/(h*h);
     numEl.textContent=bmi.toFixed(1);
     const cat=cats.find(c=>bmi<c.max);
-    catEl.textContent=cat.label; catEl.style.color=cat.color;
     const pct=Math.min(100,Math.max(0,((bmi-15)/(35-15))*100));
     fillEl.style.width=(100-pct)+'%';
     markerEl.style.left=pct+'%';
     const idealMin=(18.5*h*h).toFixed(1), idealMax=(24.9*h*h).toFixed(1);
-    idealEl.textContent=`Healthy weight range for your height: ${idealMin}–${idealMax} kg`;
+    lastResult = { bmi, catKey: cat.key, catColor: cat.color, idealMin, idealMax };
+    render();
     addToGlobalHistory(`BMI (${isMetric?'metric':'imperial'})`, bmi.toFixed(1));
     toast('BMI calculated');
   });
+  window.addEventListener('langchange', render);
 }
 
 /* ── TIP ───────────────────────────────────── */
@@ -756,6 +826,20 @@ function initAge() {
   const calcBtn = document.getElementById('age-calc-btn'), grid = document.getElementById('age-grid'), nextBday = document.getElementById('next-bday');
   const today = new Date();
   to.value = today.toISOString().slice(0,10);
+  let lastResult = null;
+
+  function render() {
+    if (!lastResult) return;
+    const { years, months, days, totalWeeks, totalMonths, totalDays, daysToBday } = lastResult;
+    grid.innerHTML = '';
+    [[years,'age-lbl-years'],[months,'age-lbl-months'],[days,'age-lbl-days'],[totalWeeks.toLocaleString(),'age-lbl-weeks'],[totalMonths,'age-lbl-months-total'],[totalDays.toLocaleString(),'age-lbl-days-total']].forEach(([num,key])=>{
+      const cell = document.createElement('div'); cell.className='age-cell';
+      cell.innerHTML = `<div class="age-num">${num}</div><div class="age-lbl">${window.t(key)}</div>`;
+      grid.appendChild(cell);
+    });
+    nextBday.textContent = daysToBday === 0 ? window.t('age-happy-birthday') : window.t('age-days-to-birthday').replace('{n}', daysToBday);
+  }
+
   calcBtn.addEventListener('click', () => {
     if (!dob.value) { toast('Please select a date of birth'); return; }
     const start = new Date(dob.value + 'T00:00:00');
@@ -772,21 +856,17 @@ function initAge() {
     const totalWeeks = Math.floor(totalDays / 7);
     const totalMonths = years * 12 + months;
 
-    grid.innerHTML = '';
-    [[years,'Years'],[months,'Months'],[days,'Days'],[totalWeeks.toLocaleString(),'Weeks'],[totalMonths,'Months Total'],[totalDays.toLocaleString(),'Days Total']].forEach(([num,lbl])=>{
-      const cell = document.createElement('div'); cell.className='age-cell';
-      cell.innerHTML = `<div class="age-num">${num}</div><div class="age-lbl">${lbl}</div>`;
-      grid.appendChild(cell);
-    });
-
     let nextBirthday = new Date(end.getFullYear(), start.getMonth(), start.getDate());
     if (nextBirthday < end) nextBirthday = new Date(end.getFullYear()+1, start.getMonth(), start.getDate());
     const daysToBday = Math.ceil((nextBirthday - end) / 86400000);
-    nextBday.textContent = daysToBday === 0 ? '🎂 Happy Birthday!' : `🎂 ${daysToBday} day${daysToBday===1?'':'s'} until next birthday`;
+
+    lastResult = { years, months, days, totalWeeks, totalMonths, totalDays, daysToBday };
+    render();
 
     addToGlobalHistory('Age calculation', `${years}y ${months}m ${days}d`);
     toast('Age calculated');
   });
+  window.addEventListener('langchange', render);
 }
 
 /* ── LOAN / EMI ────────────────────────────── */
@@ -794,6 +874,25 @@ function initLoan() {
   const amountEl = document.getElementById('loan-amount'), rateEl = document.getElementById('loan-rate'), yearsEl = document.getElementById('loan-years');
   const calcBtn = document.getElementById('loan-calc-btn'), emiEl = document.getElementById('loan-emi'), breakdown = document.getElementById('loan-breakdown');
   const canvas = document.getElementById('loan-chart'), legend = document.getElementById('chart-legend');
+  let lastResult = null;
+
+  function render() {
+    if (!lastResult) return;
+    const { P, totalInterest, totalPay, years, n } = lastResult;
+    breakdown.innerHTML = '';
+    [['loan-lbl-principal', fmtMoney(P)], ['loan-lbl-interest', fmtMoney(totalInterest)], ['loan-lbl-total-payment', fmtMoney(totalPay)], ['loan-lbl-term', `${years} yrs (${n} mo)`]].forEach(([key,val])=>{
+      const item = document.createElement('div'); item.className='lb-item';
+      item.innerHTML = `<div class="lb-label">${window.t(key)}</div><div class="lb-val">${val}</div>`;
+      breakdown.appendChild(item);
+    });
+    legend.innerHTML = '';
+    [['loan-lbl-principal','#00d4ff'],['loan-lbl-interest','#ffaa00']].forEach(([key,color])=>{
+      const item = document.createElement('div'); item.className='cl-item';
+      item.innerHTML = `<span class="cl-dot" style="background:${color}"></span>${window.t(key)}`;
+      legend.appendChild(item);
+    });
+  }
+
   calcBtn.addEventListener('click', () => {
     const P = parseFloat(amountEl.value), annualRate = parseFloat(rateEl.value), years = parseFloat(yearsEl.value);
     if (!P || !years || annualRate < 0) { toast('Please enter valid loan details'); return; }
@@ -802,27 +901,18 @@ function initLoan() {
     const totalPay = emi * n, totalInterest = totalPay - P;
 
     emiEl.textContent = '$' + emi.toFixed(2);
-    breakdown.innerHTML = '';
-    [['Principal', fmtMoney(P)], ['Total Interest', fmtMoney(totalInterest)], ['Total Payment', fmtMoney(totalPay)], ['Loan Term', `${years} yrs (${n} mo)`]].forEach(([lbl,val])=>{
-      const item = document.createElement('div'); item.className='lb-item';
-      item.innerHTML = `<div class="lb-label">${lbl}</div><div class="lb-val">${val}</div>`;
-      breakdown.appendChild(item);
-    });
+    lastResult = { P, totalInterest, totalPay, years, n };
+    render();
 
     drawDoughnut(canvas, [
       {label:'Principal', value:P, color:'#00d4ff'},
       {label:'Interest', value:totalInterest, color:'#ffaa00'}
     ]);
-    legend.innerHTML = '';
-    [['Principal','#00d4ff'],['Interest','#ffaa00']].forEach(([lbl,color])=>{
-      const item = document.createElement('div'); item.className='cl-item';
-      item.innerHTML = `<span class="cl-dot" style="background:${color}"></span>${lbl}`;
-      legend.appendChild(item);
-    });
 
     addToGlobalHistory(`Loan ${fmtMoney(P)} @ ${annualRate}%`, '$'+emi.toFixed(2)+'/mo');
     toast('EMI calculated');
   });
+  window.addEventListener('langchange', render);
 }
 
 function drawDoughnut(canvas, slices) {
@@ -883,6 +973,43 @@ function initSolar() {
   citySel.value = '5.6';
   citySel.addEventListener('change', () => { if (citySel.value !== '') sunHoursEl.value = citySel.value; });
 
+  let lastResult = null;
+
+  function render() {
+    if (!lastResult) return;
+    const { systemSizeKw, panelsNeeded, roofRequired, grossCost, netCost, monthlySavings, paybackYears, netSavings25, annualCo2Tons, treesEquivalent, roofAvail, cashflow } = lastResult;
+    sizeEl.textContent = systemSizeKw.toFixed(1) + ' kW';
+    gridEl.innerHTML = '';
+    const stats = [
+      ['solar-lbl-panels', panelsNeeded + ' panels'],
+      ['solar-lbl-roof-needed', Math.round(roofRequired) + ' sq ft'],
+      ['solar-lbl-gross-cost', fmtMoney(grossCost)],
+      ['solar-lbl-net-cost', fmtMoney(netCost)],
+      ['solar-lbl-monthly-savings', fmtMoney(monthlySavings)],
+      ['solar-lbl-payback', isFinite(paybackYears) ? paybackYears.toFixed(1)+' yrs' : '—'],
+      ['solar-lbl-net25', fmtMoney(netSavings25)],
+      ['solar-lbl-co2', annualCo2Tons.toFixed(2)+' tons'],
+      ['solar-lbl-trees', treesEquivalent.toLocaleString()+' /yr']
+    ];
+    stats.forEach(([key,val], i)=>{
+      const cell = document.createElement('div'); cell.className = 'solar-stat' + (i===5||i===6?' highlight':'');
+      cell.innerHTML = `<div class="val">${val}</div><div class="lbl">${window.t(key)}</div>`;
+      gridEl.appendChild(cell);
+    });
+
+    warningEl.textContent = roofRequired > roofAvail
+      ? window.t('solar-roof-warning').replace('{need}', Math.round(roofRequired)).replace('{avail}', roofAvail)
+      : '';
+
+    drawSolarChart(canvas, cashflow, netCost);
+    legendEl.innerHTML = '';
+    [['solar-legend-cost','#ff4d8d'],['solar-legend-savings','#00d4ff'],['solar-legend-breakeven','#ffaa00']].forEach(([key,color])=>{
+      const item = document.createElement('div'); item.className='cl-item';
+      item.innerHTML = `<span class="cl-dot" style="background:${color}"></span>${window.t(key)}`;
+      legendEl.appendChild(item);
+    });
+  }
+
   calcBtn.addEventListener('click', () => {
     const sunHours = parseFloat(sunHoursEl.value);
     const panelWatt = parseFloat(panelWattEl.value);
@@ -926,41 +1053,13 @@ function initSolar() {
     }
     const netSavings25 = cumulative25;
 
-    sizeEl.textContent = systemSizeKw.toFixed(1) + ' kW';
-
-    gridEl.innerHTML = '';
-    const stats = [
-      ['Panels Needed', panelsNeeded + ' panels'],
-      ['Roof Area Needed', Math.round(roofRequired) + ' sq ft'],
-      ['System Cost (gross)', fmtMoney(grossCost)],
-      ['Cost After Incentive', fmtMoney(netCost)],
-      ['Monthly Savings', fmtMoney(monthlySavings)],
-      ['Payback Period', isFinite(paybackYears) ? paybackYears.toFixed(1)+' yrs' : '—'],
-      ['25-Yr Net Savings', fmtMoney(netSavings25)],
-      ['CO₂ Offset / yr', annualCo2Tons.toFixed(2)+' tons'],
-      ['Equivalent Trees', treesEquivalent.toLocaleString()+' /yr']
-    ];
-    stats.forEach(([lbl,val], i)=>{
-      const cell = document.createElement('div'); cell.className = 'solar-stat' + (i===5||i===6?' highlight':'');
-      cell.innerHTML = `<div class="val">${val}</div><div class="lbl">${lbl}</div>`;
-      gridEl.appendChild(cell);
-    });
-
-    warningEl.textContent = roofRequired > roofAvail
-      ? `⚠ You need ~${Math.round(roofRequired)} sq ft of roof space but only ${roofAvail} sq ft is available. Consider higher-wattage panels or a smaller system.`
-      : '';
-
-    drawSolarChart(canvas, cashflow, netCost);
-    legendEl.innerHTML = '';
-    [['Net cost invested','#ff4d8d'],['Cumulative savings','#00d4ff'],['Break-even','#ffaa00']].forEach(([lbl,color])=>{
-      const item = document.createElement('div'); item.className='cl-item';
-      item.innerHTML = `<span class="cl-dot" style="background:${color}"></span>${lbl}`;
-      legendEl.appendChild(item);
-    });
+    lastResult = { systemSizeKw, panelsNeeded, roofRequired, grossCost, netCost, monthlySavings, paybackYears, netSavings25, annualCo2Tons, treesEquivalent, roofAvail, cashflow };
+    render();
 
     addToGlobalHistory(`Solar system ${systemSizeKw.toFixed(1)}kW`, fmtMoney(netCost));
     toast('Solar system calculated');
   });
+  window.addEventListener('langchange', render);
 }
 
 function drawSolarChart(canvas, cashflow, netCost) {
