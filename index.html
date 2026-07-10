@@ -74,39 +74,39 @@
     <div class="nav-items" id="navItems">
       <button class="nav-item active" data-panel="standard">
         <span class="nav-icon">◻</span>
-        <span class="nav-label">Standard</span>
+        <span class="nav-label" data-i18n="nav-standard">Standard</span>
       </button>
       <button class="nav-item" data-panel="scientific">
         <span class="nav-icon">∑</span>
-        <span class="nav-label">Scientific</span>
+        <span class="nav-label" data-i18n="nav-scientific">Scientific</span>
       </button>
       <button class="nav-item" data-panel="currency">
         <span class="nav-icon">₿</span>
-        <span class="nav-label">Currency</span>
+        <span class="nav-label" data-i18n="nav-currency">Currency</span>
       </button>
       <button class="nav-item" data-panel="unit">
         <span class="nav-icon">⊕</span>
-        <span class="nav-label">Units</span>
+        <span class="nav-label" data-i18n="nav-unit">Units</span>
       </button>
       <button class="nav-item" data-panel="bmi">
         <span class="nav-icon">♡</span>
-        <span class="nav-label">BMI</span>
+        <span class="nav-label" data-i18n="nav-bmi">BMI</span>
       </button>
       <button class="nav-item" data-panel="tip">
         <span class="nav-icon">✦</span>
-        <span class="nav-label">Tip</span>
+        <span class="nav-label" data-i18n="nav-tip">Tip</span>
       </button>
       <button class="nav-item" data-panel="age">
         <span class="nav-icon">◷</span>
-        <span class="nav-label">Age</span>
+        <span class="nav-label" data-i18n="nav-age">Age</span>
       </button>
       <button class="nav-item" data-panel="loan">
         <span class="nav-icon">◈</span>
-        <span class="nav-label">Loan/EMI</span>
+        <span class="nav-label" data-i18n="nav-loan">Loan/EMI</span>
       </button>
       <button class="nav-item" data-panel="solar">
         <span class="nav-icon">☀</span>
-        <span class="nav-label">Solar</span>
+        <span class="nav-label" data-i18n="nav-solar">Solar</span>
       </button>
     </div>
     <div class="scroll-hint" id="scrollHint" title="More below">⌄</div>
@@ -124,15 +124,15 @@
 
   <!-- Mobile bottom nav — ALL tools visible directly, horizontally scrollable -->
   <nav class="bottom-nav" id="bottomNav">
-    <button class="bnav-item active" data-panel="standard">◻<span>Std</span></button>
-    <button class="bnav-item" data-panel="scientific">∑<span>Sci</span></button>
-    <button class="bnav-item" data-panel="currency">₿<span>FX</span></button>
-    <button class="bnav-item" data-panel="unit">⊕<span>Unit</span></button>
-    <button class="bnav-item" data-panel="bmi">♡<span>BMI</span></button>
-    <button class="bnav-item" data-panel="tip">✦<span>Tip</span></button>
-    <button class="bnav-item" data-panel="age">◷<span>Age</span></button>
-    <button class="bnav-item" data-panel="loan">◈<span>Loan</span></button>
-    <button class="bnav-item" data-panel="solar">☀<span>Solar</span></button>
+    <button class="bnav-item active" data-panel="standard">◻<span data-i18n="bnav-std">Std</span></button>
+    <button class="bnav-item" data-panel="scientific">∑<span data-i18n="bnav-sci">Sci</span></button>
+    <button class="bnav-item" data-panel="currency">₿<span data-i18n="bnav-fx">FX</span></button>
+    <button class="bnav-item" data-panel="unit">⊕<span data-i18n="bnav-unit">Unit</span></button>
+    <button class="bnav-item" data-panel="bmi">♡<span data-i18n="nav-bmi">BMI</span></button>
+    <button class="bnav-item" data-panel="tip">✦<span data-i18n="nav-tip">Tip</span></button>
+    <button class="bnav-item" data-panel="age">◷<span data-i18n="nav-age">Age</span></button>
+    <button class="bnav-item" data-panel="loan">◈<span data-i18n="bnav-loan">Loan</span></button>
+    <button class="bnav-item" data-panel="solar">☀<span data-i18n="nav-solar">Solar</span></button>
   </nav>
 
   <!-- Main Content -->
@@ -143,8 +143,8 @@
       <div class="panel-header">
         <h1 class="panel-title">Calculator</h1>
         <div class="header-pills">
-          <span class="pill" id="std-mode-pill">DEG</span>
-          <button class="clear-hist-btn" id="std-clear-hist">Clear History</button>
+          <span class="pill" id="std-mode-pill" data-i18n="deg-label">DEG</span>
+          <button class="clear-hist-btn" id="std-clear-hist" data-i18n="clear-history">Clear History</button>
         </div>
       </div>
 
@@ -246,9 +246,9 @@
     <section class="panel" id="panel-currency">
       <div class="panel-header">
         <h1 class="panel-title">Currency</h1>
-        <button class="refresh-btn" id="fx-refresh">↻ Live Rates</button>
+        <button class="refresh-btn" id="fx-refresh" data-i18n="refresh-rates">↻ Live Rates</button>
       </div>
-      <div class="fx-status" id="fx-status">Reference rates · Tap ↻ for live</div>
+      <div class="fx-status" id="fx-status" data-i18n="fx-status-default">Reference rates · Tap ↻ for live</div>
 
       <div class="fx-card">
         <div class="fx-row">
@@ -275,16 +275,16 @@
 
       <div class="fx-trend-card" id="fx-trend-card">
         <div class="fx-trend-head">
-          <span class="fx-trend-label" id="fx-trend-label">7-day trend</span>
+          <span class="fx-trend-label" id="fx-trend-label" data-i18n="fx-trend-default">7-day trend</span>
           <span class="fx-trend-change" id="fx-trend-change">—</span>
         </div>
         <canvas id="fx-trend-chart" width="100%" height="70"></canvas>
       </div>
 
-      <div class="section-label">Popular Pairs</div>
+      <div class="section-label" data-i18n="section-popular-pairs">Popular Pairs</div>
       <div class="pairs-grid" id="pairs-grid"></div>
 
-      <div class="section-label" style="margin-top:20px">All Rates vs USD</div>
+      <div class="section-label" style="margin-top:20px" data-i18n="section-all-rates">All Rates vs USD</div>
       <div class="rates-table" id="rates-table"></div>
     </section>
 
@@ -292,7 +292,7 @@
     <div class="fx-picker-overlay" id="fxPickerOverlay"></div>
     <div class="fx-picker-sheet" id="fxPickerSheet">
       <div class="fx-picker-sheet-head">
-        <input class="fx-picker-search" id="fxPickerSearch" type="text" placeholder="Search currency or country…" autocomplete="off"/>
+        <input class="fx-picker-search" id="fxPickerSearch" type="text" placeholder="Search currency or country…" data-i18n-placeholder="fx-search-placeholder" autocomplete="off"/>
         <button class="fx-picker-close" id="fxPickerClose">✕</button>
       </div>
       <div class="fx-picker-list" id="fxPickerList"></div>
@@ -304,16 +304,16 @@
         <h1 class="panel-title">Unit Converter</h1>
       </div>
       <div class="unit-cats" id="unit-cats">
-        <button class="ucat active" data-cat="length">📏 Length</button>
-        <button class="ucat" data-cat="weight">⚖️ Weight</button>
-        <button class="ucat" data-cat="temp">🌡️ Temp</button>
-        <button class="ucat" data-cat="area">🟦 Area</button>
-        <button class="ucat" data-cat="speed">🚀 Speed</button>
-        <button class="ucat" data-cat="data">💾 Data</button>
-        <button class="ucat" data-cat="time">⏱ Time</button>
-        <button class="ucat" data-cat="energy">⚡ Energy</button>
-        <button class="ucat" data-cat="pressure">🌀 Pressure</button>
-        <button class="ucat" data-cat="volume">🧪 Volume</button>
+        <button class="ucat active" data-cat="length" data-i18n="ucat-length">📏 Length</button>
+        <button class="ucat" data-cat="weight" data-i18n="ucat-weight">⚖️ Weight</button>
+        <button class="ucat" data-cat="temp" data-i18n="ucat-temp">🌡️ Temp</button>
+        <button class="ucat" data-cat="area" data-i18n="ucat-area">🟦 Area</button>
+        <button class="ucat" data-cat="speed" data-i18n="ucat-speed">🚀 Speed</button>
+        <button class="ucat" data-cat="data" data-i18n="ucat-data">💾 Data</button>
+        <button class="ucat" data-cat="time" data-i18n="ucat-time">⏱ Time</button>
+        <button class="ucat" data-cat="energy" data-i18n="ucat-energy">⚡ Energy</button>
+        <button class="ucat" data-cat="pressure" data-i18n="ucat-pressure">🌀 Pressure</button>
+        <button class="ucat" data-cat="volume" data-i18n="ucat-volume">🧪 Volume</button>
       </div>
       <div class="unit-card">
         <div class="unit-row-wrap">
@@ -337,39 +337,39 @@
       <div class="panel-header"><h1 class="panel-title">BMI Calculator</h1></div>
       <div class="tool-card">
         <div class="toggle-row">
-          <button class="unit-pill active" id="bmi-metric">Metric</button>
-          <button class="unit-pill" id="bmi-imperial">Imperial</button>
+          <button class="unit-pill active" id="bmi-metric" data-i18n="bmi-metric">Metric</button>
+          <button class="unit-pill" id="bmi-imperial" data-i18n="bmi-imperial">Imperial</button>
         </div>
         <div class="input-group" id="bmi-inputs-metric">
           <div class="field-wrap">
-            <label>Height (cm)</label>
+            <label data-i18n="lbl-height-cm">Height (cm)</label>
             <input class="tool-input" id="bmi-h-cm" type="number" placeholder="170" value="170"/>
           </div>
           <div class="field-wrap">
-            <label>Weight (kg)</label>
+            <label data-i18n="lbl-weight-kg">Weight (kg)</label>
             <input class="tool-input" id="bmi-w-kg" type="number" placeholder="70" value="70"/>
           </div>
         </div>
         <div class="input-group hidden" id="bmi-inputs-imperial">
           <div class="field-wrap">
-            <label>Height (ft)</label>
+            <label data-i18n="lbl-height-ft">Height (ft)</label>
             <input class="tool-input" id="bmi-h-ft" type="number" placeholder="5.7" value="5.7"/>
           </div>
           <div class="field-wrap">
-            <label>Weight (lbs)</label>
+            <label data-i18n="lbl-weight-lbs">Weight (lbs)</label>
             <input class="tool-input" id="bmi-w-lbs" type="number" placeholder="154" value="154"/>
           </div>
         </div>
-        <button class="calc-btn" id="bmi-calc-btn">Calculate BMI</button>
+        <button class="calc-btn" id="bmi-calc-btn" data-i18n="bmi-calc">Calculate BMI</button>
         <div class="result-display" id="bmi-result-display">
           <div class="big-result" id="bmi-number">—</div>
-          <div class="result-label" id="bmi-cat">Enter values above</div>
+          <div class="result-label" id="bmi-cat" data-i18n="bmi-enter-values">Enter values above</div>
           <div class="bmi-bar-wrap">
             <div class="bmi-bar">
               <div class="bmi-fill" id="bmi-fill"></div>
               <div class="bmi-marker" id="bmi-marker"></div>
             </div>
-            <div class="bmi-labels"><span>Underweight</span><span>Normal</span><span>Overweight</span><span>Obese</span></div>
+            <div class="bmi-labels"><span data-i18n="bmi-underweight">Underweight</span><span data-i18n="bmi-normal">Normal</span><span data-i18n="bmi-overweight">Overweight</span><span data-i18n="bmi-obese">Obese</span></div>
           </div>
           <div class="bmi-ideal" id="bmi-ideal"></div>
         </div>
@@ -381,11 +381,11 @@
       <div class="panel-header"><h1 class="panel-title">Tip Calculator</h1></div>
       <div class="tool-card">
         <div class="field-wrap">
-          <label>Bill Amount ($)</label>
+          <label data-i18n="lbl-bill-amount">Bill Amount ($)</label>
           <input class="tool-input" id="tip-bill" type="number" placeholder="50.00" value="50"/>
         </div>
         <div class="field-wrap">
-          <label>Tip Percentage</label>
+          <label data-i18n="lbl-tip-pct">Tip Percentage</label>
           <div class="tip-quick-row">
             <button class="tip-q" data-tip="10">10%</button>
             <button class="tip-q active" data-tip="15">15%</button>
@@ -396,13 +396,13 @@
           <input class="tool-input" id="tip-pct" type="number" placeholder="15" value="15"/>
         </div>
         <div class="field-wrap">
-          <label>Split Between</label>
+          <label data-i18n="lbl-split-between">Split Between</label>
           <input class="tool-input" id="tip-split" type="number" placeholder="1" value="1" min="1"/>
         </div>
         <div class="tip-results">
-          <div class="tip-row"><span>Tip Amount</span><span class="tip-val" id="tip-amount">$7.50</span></div>
-          <div class="tip-row"><span>Total Bill</span><span class="tip-val" id="tip-total">$57.50</span></div>
-          <div class="tip-row tip-row-highlight"><span>Per Person</span><span class="tip-val" id="tip-per">$57.50</span></div>
+          <div class="tip-row"><span data-i18n="tip-row-amount">Tip Amount</span><span class="tip-val" id="tip-amount">$7.50</span></div>
+          <div class="tip-row"><span data-i18n="tip-row-total">Total Bill</span><span class="tip-val" id="tip-total">$57.50</span></div>
+          <div class="tip-row tip-row-highlight"><span data-i18n="tip-row-per">Per Person</span><span class="tip-val" id="tip-per">$57.50</span></div>
         </div>
       </div>
     </section>
@@ -412,14 +412,14 @@
       <div class="panel-header"><h1 class="panel-title">Age Calculator</h1></div>
       <div class="tool-card">
         <div class="field-wrap">
-          <label>Date of Birth</label>
+          <label data-i18n="lbl-dob">Date of Birth</label>
           <input class="tool-input" id="age-dob" type="date"/>
         </div>
         <div class="field-wrap">
-          <label>Calculate Until</label>
+          <label data-i18n="lbl-calc-until">Calculate Until</label>
           <input class="tool-input" id="age-to" type="date"/>
         </div>
-        <button class="calc-btn" id="age-calc-btn">Calculate Age</button>
+        <button class="calc-btn" id="age-calc-btn" data-i18n="age-calc">Calculate Age</button>
         <div class="result-display" id="age-result">
           <div class="age-grid" id="age-grid"></div>
           <div class="next-bday" id="next-bday"></div>
@@ -432,22 +432,22 @@
       <div class="panel-header"><h1 class="panel-title">Loan / EMI</h1></div>
       <div class="tool-card">
         <div class="field-wrap">
-          <label>Loan Amount ($)</label>
+          <label data-i18n="lbl-loan-amount">Loan Amount ($)</label>
           <input class="tool-input" id="loan-amount" type="number" placeholder="100000" value="100000"/>
         </div>
         <div class="field-wrap">
-          <label>Annual Interest Rate (%)</label>
+          <label data-i18n="lbl-interest-rate">Annual Interest Rate (%)</label>
           <input class="tool-input" id="loan-rate" type="number" placeholder="8.5" value="8.5" step="0.1"/>
         </div>
         <div class="field-wrap">
-          <label>Loan Term (Years)</label>
+          <label data-i18n="lbl-loan-term">Loan Term (Years)</label>
           <input class="tool-input" id="loan-years" type="number" placeholder="10" value="10"/>
         </div>
-        <button class="calc-btn" id="loan-calc-btn">Calculate EMI</button>
+        <button class="calc-btn" id="loan-calc-btn" data-i18n="loan-calc">Calculate EMI</button>
         <div class="loan-results" id="loan-results">
           <div class="loan-big">
             <div class="big-result" id="loan-emi">—</div>
-            <div class="result-label">Monthly EMI</div>
+            <div class="result-label" data-i18n="loan-monthly-emi">Monthly EMI</div>
           </div>
           <div class="loan-breakdown" id="loan-breakdown"></div>
           <div class="loan-chart-wrap">
@@ -463,76 +463,76 @@
       <div class="panel-header">
         <h1 class="panel-title">Solar Calculator</h1>
         <div class="header-pills">
-          <span class="pill">☀ Full System</span>
+          <span class="pill" data-i18n="solar-full-system">☀ Full System</span>
         </div>
       </div>
 
       <div class="tool-card">
         <div class="field-wrap">
-          <label>Location (peak sun hours/day)</label>
+          <label data-i18n="lbl-solar-location">Location (peak sun hours/day)</label>
           <select class="unit-sel solar-sel" id="solar-city"></select>
         </div>
 
         <div class="input-group" id="solar-custom-wrap">
           <div class="field-wrap">
-            <label>Peak Sun Hours (auto)</label>
+            <label data-i18n="lbl-peak-sun">Peak Sun Hours (auto)</label>
             <input class="tool-input" id="solar-sun-hours" type="number" step="0.1" value="5.5"/>
           </div>
           <div class="field-wrap">
-            <label>Panel Wattage (W)</label>
+            <label data-i18n="lbl-panel-watt">Panel Wattage (W)</label>
             <input class="tool-input" id="solar-panel-watt" type="number" value="400"/>
           </div>
         </div>
 
         <div class="input-group">
           <div class="field-wrap">
-            <label>Monthly Electricity Bill ($)</label>
+            <label data-i18n="lbl-monthly-bill">Monthly Electricity Bill ($)</label>
             <input class="tool-input" id="solar-bill" type="number" value="150"/>
           </div>
           <div class="field-wrap">
-            <label>Rate ($/kWh)</label>
+            <label data-i18n="lbl-rate-kwh">Rate ($/kWh)</label>
             <input class="tool-input" id="solar-rate" type="number" step="0.01" value="0.15"/>
           </div>
         </div>
 
         <div class="input-group">
           <div class="field-wrap">
-            <label>Available Roof Area (sq ft)</label>
+            <label data-i18n="lbl-roof-area">Available Roof Area (sq ft)</label>
             <input class="tool-input" id="solar-roof" type="number" value="600"/>
           </div>
           <div class="field-wrap">
-            <label>Install Cost ($/Watt)</label>
+            <label data-i18n="lbl-install-cost">Install Cost ($/Watt)</label>
             <input class="tool-input" id="solar-cost-watt" type="number" step="0.1" value="3.0"/>
           </div>
         </div>
 
         <div class="input-group">
           <div class="field-wrap">
-            <label>System Losses (%)</label>
+            <label data-i18n="lbl-sys-losses">System Losses (%)</label>
             <input class="tool-input" id="solar-losses" type="number" value="20"/>
           </div>
           <div class="field-wrap">
-            <label>Tax Credit / Incentive (%)</label>
+            <label data-i18n="lbl-tax-credit">Tax Credit / Incentive (%)</label>
             <input class="tool-input" id="solar-incentive" type="number" value="30"/>
           </div>
         </div>
 
         <div class="field-wrap">
-          <label>Annual Utility Price Increase (%)</label>
+          <label data-i18n="lbl-utility-increase">Annual Utility Price Increase (%)</label>
           <input class="tool-input" id="solar-inflation" type="number" step="0.1" value="3"/>
         </div>
 
-        <button class="calc-btn" id="solar-calc-btn">☀ Calculate My Solar System</button>
+        <button class="calc-btn" id="solar-calc-btn" data-i18n="solar-calc-btn">☀ Calculate My Solar System</button>
 
         <div class="result-display" id="solar-result-display">
           <div class="big-result" id="solar-size">—</div>
-          <div class="result-label">Recommended System Size</div>
+          <div class="result-label" data-i18n="solar-result-label">Recommended System Size</div>
 
           <div class="solar-grid" id="solar-grid"></div>
 
           <div class="solar-warning" id="solar-roof-warning"></div>
 
-          <div class="section-label" style="margin-top:22px">25-Year Cost vs. Savings</div>
+          <div class="section-label" style="margin-top:22px" data-i18n="section-solar-trend">25-Year Cost vs. Savings</div>
           <div class="loan-chart-wrap solar-chart-wrap">
             <canvas id="solar-chart" width="100%" height="220"></canvas>
           </div>
