@@ -12,6 +12,13 @@
 <br>
 
 <div align="center">
+  <a href="./README.en.md"><b>🇺🇸 English</b></a> &nbsp;|&nbsp; 
+  <a href="./README.md"><b>🇵🇰 اردو</b></a>
+</div>
+
+<br>
+
+<div align="center">
   <i>Most calculators are either too simple and only perform basic tasks, or their design is outdated and unappealing. <b>CALC X</b> was built to provide users with all essential calculation tools in a single app, delivered through a stunning, modern, and highly user-friendly interface.</i>
 </div>
 

@@ -8,6 +8,13 @@
 [![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Inter&weight=600&size=20&pause=1000&color=00CFFF&center=true&vCenter=true&width=600&lines=A+modern%2C+beautiful%2C+and+fully-featured+calculator;Live+currency+with+historical+trends;Standard%2C+Scientific%2C+BMI%2C+Loan%2C+and+more!;Glassmorphism+UI+Design)](https://git.io/typing-svg)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-00cfff.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+
+<br>
+
+<div align="center">
+  <a href="./README.en.md"><b>🇺🇸 English</b></a> &nbsp;|&nbsp; 
+  <a href="./README.md"><b>🇵🇰 اردو</b></a>
+</div>
 </div>
 
 <br>
