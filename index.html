@@ -3,27 +3,58 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>CALC X — Premium Calculator</title>
+<title>CALC X — Premium All-in-One Calculator</title>
+<meta name="description" content="CALC X is a premium all-in-one calculator featuring standard, scientific, currency converter, unit converter, BMI, tip, age, and loan/EMI calculators with a stunning animated UI."/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css"/>
 <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
-<!-- Particle canvas -->
+<!-- ══════════════ 3D ANIMATED INTRO ══════════════ -->
+<div class="intro" id="intro">
+  <canvas id="intro-particles"></canvas>
+  <div class="intro-stage">
+    <div class="orbit-system" id="orbitSystem">
+      <div class="sun">
+        <div class="sun-core"></div>
+        <div class="sun-flare"></div>
+      </div>
+      <div class="ring ring-1"><div class="ring-dot"></div></div>
+      <div class="ring ring-2"><div class="ring-dot gold"></div></div>
+      <div class="ring ring-3"><div class="ring-dot"></div></div>
+    </div>
+    <div class="intro-text">
+      <h1 class="intro-title">
+        <span>C</span><span>A</span><span>L</span><span>C</span>
+        <span class="intro-x">X</span>
+      </h1>
+      <p class="intro-tag">Premium Calculator Suite</p>
+    </div>
+    <div class="intro-progress-wrap">
+      <div class="intro-progress"><div class="intro-progress-fill" id="introFill"></div></div>
+      <span class="intro-pct" id="introPct">0%</span>
+    </div>
+    <button class="intro-skip" id="introSkip">Skip ▸</button>
+  </div>
+</div>
+
+<!-- ▸ Ambient particle canvas -->
 <canvas id="particles"></canvas>
 
-<!-- Glow cursor -->
+<!-- ▸ Mouse-follow glow orb -->
 <div id="cursor-glow"></div>
 
-<!-- Toast container -->
+<!-- ▸ Toast notification container -->
 <div id="toast-container"></div>
 
-<!-- MAIN APP -->
+<!-- ═══════════ MAIN APPLICATION SHELL ═══════════ -->
 <div class="app" id="app">
 
-  <!-- Sidebar Navigation -->
+  <!-- ─── Desktop Sidebar ─────────────────────── -->
   <nav class="sidebar" id="sidebar">
     <div class="sidebar-logo">
       <div class="logo-mark">⌗</div>
@@ -32,62 +63,92 @@
 
     <div class="nav-items">
       <button class="nav-item active" data-panel="standard">
-        <span class="nav-icon">◻</span>
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><line x1="8" y1="9" x2="16" y2="9"></line><line x1="8" y1="15" x2="16" y2="15"></line></svg></span>
         <span class="nav-label">Standard</span>
       </button>
       <button class="nav-item" data-panel="scientific">
-        <span class="nav-icon">∑</span>
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v6.6l-5.6 9.4A2 2 0 0 0 6 21h12a2 2 0 0 0 1.6-3L14 8.6V2"/><path d="M8.5 2h7"/><path d="M14 11.5 10 14"/></svg></span>
         <span class="nav-label">Scientific</span>
       </button>
       <button class="nav-item" data-panel="currency">
-        <span class="nav-icon">₿</span>
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></span>
         <span class="nav-label">Currency</span>
       </button>
       <button class="nav-item" data-panel="unit">
-        <span class="nav-icon">⊕</span>
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M12 22v-8"/><path d="M12 8V2"/><path d="M3 21l8-8"/><path d="M21 21l-8-8"/></svg></span>
         <span class="nav-label">Units</span>
       </button>
       <button class="nav-item" data-panel="bmi">
-        <span class="nav-icon">♡</span>
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"/></svg></span>
         <span class="nav-label">BMI</span>
       </button>
       <button class="nav-item" data-panel="tip">
-        <span class="nav-icon">✦</span>
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></span>
         <span class="nav-label">Tip</span>
       </button>
       <button class="nav-item" data-panel="age">
-        <span class="nav-icon">◷</span>
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></span>
         <span class="nav-label">Age</span>
       </button>
       <button class="nav-item" data-panel="loan">
-        <span class="nav-icon">◈</span>
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg></span>
         <span class="nav-label">Loan/EMI</span>
       </button>
     </div>
 
-    <div class="sidebar-footer">
-      <button class="theme-toggle" id="themeToggle" title="Toggle theme">
-        <span id="themeIcon">◑</span>
-      </button>
-      <button class="history-toggle" id="historyToggle" title="History">
-        <span>☰</span>
-      </button>
-    </div>
+    <!-- Global controls moved here so they render when sidebar is hidden -->
   </nav>
 
-  <!-- Mobile bottom nav -->
+  <div class="global-controls" id="globalControls">
+    <!-- Language button injected here by JS -->
+    <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+      <span id="themeIcon">◑</span>
+    </button>
+    <button class="history-toggle" id="historyToggle" title="History">
+      <span>☰</span>
+    </button>
+  </div>
+
+  <!-- ─── Mobile Bottom Navigation (scrollable — all 8 tools) ── -->
   <nav class="bottom-nav" id="bottomNav">
-    <button class="bnav-item active" data-panel="standard">◻<span>Std</span></button>
-    <button class="bnav-item" data-panel="scientific">∑<span>Sci</span></button>
-    <button class="bnav-item" data-panel="currency">₿<span>FX</span></button>
-    <button class="bnav-item" data-panel="unit">⊕<span>Unit</span></button>
-    <button class="bnav-item" data-panel="bmi">♡<span>More</span></button>
+    <button class="bnav-item active" data-panel="standard">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><line x1="8" y1="9" x2="16" y2="9"></line><line x1="8" y1="15" x2="16" y2="15"></line></svg>
+      <span data-i18n="bnav-std">Std</span>
+    </button>
+    <button class="bnav-item" data-panel="scientific">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v6.6l-5.6 9.4A2 2 0 0 0 6 21h12a2 2 0 0 0 1.6-3L14 8.6V2"/><path d="M8.5 2h7"/><path d="M14 11.5 10 14"/></svg>
+      <span data-i18n="bnav-sci">Sci</span>
+    </button>
+    <button class="bnav-item" data-panel="currency">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+      <span data-i18n="bnav-fx">FX</span>
+    </button>
+    <button class="bnav-item" data-panel="unit">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M12 22v-8"/><path d="M12 8V2"/><path d="M3 21l8-8"/><path d="M21 21l-8-8"/></svg>
+      <span data-i18n="bnav-unit">Unit</span>
+    </button>
+    <button class="bnav-item" data-panel="bmi">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"/></svg>
+      <span data-i18n="bnav-bmi">BMI</span>
+    </button>
+    <button class="bnav-item" data-panel="tip">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+      <span data-i18n="bnav-tip">Tip</span>
+    </button>
+    <button class="bnav-item" data-panel="age">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+      <span data-i18n="bnav-age">Age</span>
+    </button>
+    <button class="bnav-item" data-panel="loan">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+      <span data-i18n="bnav-loan">Loan</span>
+    </button>
   </nav>
 
-  <!-- Main Content -->
+  <!-- ═══════════ MAIN CONTENT AREA ═══════════ -->
   <main class="main-content">
 
-    <!-- ══ STANDARD PANEL ══ -->
+    <!-- ══ STANDARD CALCULATOR ══════════════════ -->
     <section class="panel active" id="panel-standard">
       <div class="panel-header">
         <h1 class="panel-title">Calculator</h1>
@@ -133,7 +194,7 @@
       </div>
     </section>
 
-    <!-- ══ SCIENTIFIC PANEL ══ -->
+    <!-- ══ SCIENTIFIC CALCULATOR ════════════════ -->
     <section class="panel" id="panel-scientific">
       <div class="panel-header">
         <h1 class="panel-title">Scientific</h1>
@@ -153,25 +214,25 @@
       <div class="history-bar" id="sci-hist-bar"></div>
 
       <div class="keypad sci-keypad">
-        <!-- Sci row 1 -->
+        <!-- Scientific functions row 1 -->
         <button class="k k-sci" data-sci="sin">sin</button>
         <button class="k k-sci" data-sci="cos">cos</button>
         <button class="k k-sci" data-sci="tan">tan</button>
         <button class="k k-sci" data-sci="log">log</button>
         <button class="k k-sci" data-sci="ln">ln</button>
-        <!-- row 2 -->
+        <!-- Row 2 -->
         <button class="k k-sci" data-sci="sqrt">√</button>
         <button class="k k-sci" data-sci="cbrt">∛</button>
         <button class="k k-sci" data-sci="sq">x²</button>
         <button class="k k-sci" data-sci="pow">xʸ</button>
         <button class="k k-sci" data-sci="exp">eˣ</button>
-        <!-- row 3 -->
+        <!-- Row 3 -->
         <button class="k k-sci" data-sci="pi">π</button>
         <button class="k k-sci" data-sci="e">e</button>
         <button class="k k-sci" data-sci="abs">|x|</button>
         <button class="k k-sci" data-sci="inv">1/x</button>
         <button class="k k-sci" data-sci="fact">n!</button>
-        <!-- row 4: num -->
+        <!-- Numeric rows -->
         <button class="k k-fn" data-a="clear">AC</button>
         <button class="k k-fn" data-a="sign">+/−</button>
         <button class="k k-fn" data-a="bksp">⌫</button>
@@ -198,7 +259,7 @@
       </div>
     </section>
 
-    <!-- ══ CURRENCY PANEL ══ -->
+    <!-- ══ CURRENCY CONVERTER ══════════════════ -->
     <section class="panel" id="panel-currency">
       <div class="panel-header">
         <h1 class="panel-title">Currency</h1>
@@ -209,10 +270,9 @@
       <div class="fx-card">
         <div class="fx-row">
           <div class="fx-left">
-            <span class="fx-flag" id="fx-flag-from">🇺🇸</span>
             <select class="fx-sel" id="fx-from"></select>
           </div>
-          <input class="fx-input" id="fx-amount-from" type="number" value="1" placeholder="0.00"/>
+          <input class="fx-input" id="fx-amount-from" type="number" value="1"/>
         </div>
         <div class="fx-divider">
           <button class="fx-swap" id="fx-swap">⇅</button>
@@ -220,36 +280,49 @@
         </div>
         <div class="fx-row">
           <div class="fx-left">
-            <span class="fx-flag" id="fx-flag-to">🇵🇰</span>
             <select class="fx-sel" id="fx-to"></select>
           </div>
           <input class="fx-input fx-output" id="fx-amount-to" type="number" readonly placeholder="0.00"/>
         </div>
       </div>
 
-      <div class="section-label">Popular Pairs</div>
-      <div class="pairs-grid" id="pairs-grid"></div>
+      <div class="fx-trend-card">
+        <div class="trend-header">
+          <div class="trend-title" data-i18n="fx-trend-title">7-DAY TREND</div>
+          <div class="trend-pct" id="trend-pct">—</div>
+        </div>
+        <canvas id="trend-chart" width="300" height="80"></canvas>
+      </div>
 
-      <div class="section-label" style="margin-top:20px">All Rates vs USD</div>
-      <div class="rates-table" id="rates-table"></div>
+      <div class="rates-toggle-container" style="text-align: center; margin-bottom: 20px;">
+        <button class="rates-toggle-btn" id="rates-toggle-btn" data-i18n="show-rates-btn">Show Pairs & Rates</button>
+      </div>
+      
+      <div id="rates-extra-container" style="display: none;">
+        <div class="section-label" data-i18n="pop-pairs">Popular Pairs</div>
+        <div class="pairs-grid" id="pairs-grid"></div>
+
+        <div class="section-label" style="margin-top:20px" data-i18n="rates-vs-usd">All Rates vs USD</div>
+        <div class="rates-table" id="rates-table"></div>
+      </div>
     </section>
 
-    <!-- ══ UNIT PANEL ══ -->
+    <!-- ══ UNIT CONVERTER ══════════════════════ -->
     <section class="panel" id="panel-unit">
       <div class="panel-header">
         <h1 class="panel-title">Unit Converter</h1>
       </div>
       <div class="unit-cats" id="unit-cats">
-        <button class="ucat active" data-cat="length">📏 Length</button>
-        <button class="ucat" data-cat="weight">⚖️ Weight</button>
-        <button class="ucat" data-cat="temp">🌡️ Temp</button>
-        <button class="ucat" data-cat="area">🟦 Area</button>
-        <button class="ucat" data-cat="speed">🚀 Speed</button>
-        <button class="ucat" data-cat="data">💾 Data</button>
-        <button class="ucat" data-cat="time">⏱ Time</button>
-        <button class="ucat" data-cat="energy">⚡ Energy</button>
-        <button class="ucat" data-cat="pressure">🌀 Pressure</button>
-        <button class="ucat" data-cat="volume">🧪 Volume</button>
+        <button class="ucat active" data-cat="length" data-i18n="cat-length">📏 Length</button>
+        <button class="ucat" data-cat="weight" data-i18n="cat-weight">⚖️ Weight</button>
+        <button class="ucat" data-cat="temp" data-i18n="cat-temp">🌡️ Temp</button>
+        <button class="ucat" data-cat="area" data-i18n="cat-area">🟦 Area</button>
+        <button class="ucat" data-cat="speed" data-i18n="cat-speed">🚀 Speed</button>
+        <button class="ucat" data-cat="data" data-i18n="cat-data">💾 Data</button>
+        <button class="ucat" data-cat="time" data-i18n="cat-time">⏱ Time</button>
+        <button class="ucat" data-cat="energy" data-i18n="cat-energy">⚡ Energy</button>
+        <button class="ucat" data-cat="pressure" data-i18n="cat-pressure">🌀 Pressure</button>
+        <button class="ucat" data-cat="volume" data-i18n="cat-volume">🧪 Volume</button>
       </div>
       <div class="unit-card">
         <div class="unit-row-wrap">
@@ -268,60 +341,60 @@
       <div class="unit-quick-grid" id="unit-quick"></div>
     </section>
 
-    <!-- ══ BMI PANEL ══ -->
+    <!-- ══ BMI CALCULATOR ══════════════════════ -->
     <section class="panel" id="panel-bmi">
       <div class="panel-header"><h1 class="panel-title">BMI Calculator</h1></div>
       <div class="tool-card">
         <div class="toggle-row">
-          <button class="unit-pill active" id="bmi-metric">Metric</button>
-          <button class="unit-pill" id="bmi-imperial">Imperial</button>
+          <button class="unit-pill active" id="bmi-metric" data-i18n="bmi-metric">Metric</button>
+          <button class="unit-pill" id="bmi-imperial" data-i18n="bmi-imperial">Imperial</button>
         </div>
         <div class="input-group" id="bmi-inputs-metric">
           <div class="field-wrap">
-            <label>Height (cm)</label>
+            <label data-i18n="bmi-h-cm">Height (cm)</label>
             <input class="tool-input" id="bmi-h-cm" type="number" placeholder="170" value="170"/>
           </div>
           <div class="field-wrap">
-            <label>Weight (kg)</label>
+            <label data-i18n="bmi-w-kg">Weight (kg)</label>
             <input class="tool-input" id="bmi-w-kg" type="number" placeholder="70" value="70"/>
           </div>
         </div>
         <div class="input-group hidden" id="bmi-inputs-imperial">
           <div class="field-wrap">
-            <label>Height (ft)</label>
+            <label data-i18n="bmi-h-ft">Height (ft)</label>
             <input class="tool-input" id="bmi-h-ft" type="number" placeholder="5.7" value="5.7"/>
           </div>
           <div class="field-wrap">
-            <label>Weight (lbs)</label>
+            <label data-i18n="bmi-w-lbs">Weight (lbs)</label>
             <input class="tool-input" id="bmi-w-lbs" type="number" placeholder="154" value="154"/>
           </div>
         </div>
-        <button class="calc-btn" id="bmi-calc-btn">Calculate BMI</button>
+        <button class="calc-btn" id="bmi-calc-btn" data-i18n="bmi-calc">Calculate BMI</button>
         <div class="result-display" id="bmi-result-display">
           <div class="big-result" id="bmi-number">—</div>
-          <div class="result-label" id="bmi-cat">Enter values above</div>
+          <div class="result-label" id="bmi-cat" data-i18n="bmi-enter-val">Enter values above</div>
           <div class="bmi-bar-wrap">
             <div class="bmi-bar">
               <div class="bmi-fill" id="bmi-fill"></div>
               <div class="bmi-marker" id="bmi-marker"></div>
             </div>
-            <div class="bmi-labels"><span>Underweight</span><span>Normal</span><span>Overweight</span><span>Obese</span></div>
+            <div class="bmi-labels"><span data-i18n="bmi-under">Underweight</span><span data-i18n="bmi-normal">Normal</span><span data-i18n="bmi-over">Overweight</span><span data-i18n="bmi-obese">Obese</span></div>
           </div>
           <div class="bmi-ideal" id="bmi-ideal"></div>
         </div>
       </div>
     </section>
 
-    <!-- ══ TIP PANEL ══ -->
+    <!-- ══ TIP CALCULATOR ══════════════════════ -->
     <section class="panel" id="panel-tip">
       <div class="panel-header"><h1 class="panel-title">Tip Calculator</h1></div>
       <div class="tool-card">
         <div class="field-wrap">
-          <label>Bill Amount ($)</label>
+          <label data-i18n="tip-bill">Bill Amount ($)</label>
           <input class="tool-input" id="tip-bill" type="number" placeholder="50.00" value="50"/>
         </div>
         <div class="field-wrap">
-          <label>Tip Percentage</label>
+          <label data-i18n="tip-pct">Tip Percentage</label>
           <div class="tip-quick-row">
             <button class="tip-q" data-tip="10">10%</button>
             <button class="tip-q active" data-tip="15">15%</button>
@@ -332,30 +405,30 @@
           <input class="tool-input" id="tip-pct" type="number" placeholder="15" value="15"/>
         </div>
         <div class="field-wrap">
-          <label>Split Between</label>
+          <label data-i18n="tip-split">Split Between</label>
           <input class="tool-input" id="tip-split" type="number" placeholder="1" value="1" min="1"/>
         </div>
         <div class="tip-results">
-          <div class="tip-row"><span>Tip Amount</span><span class="tip-val" id="tip-amount">$7.50</span></div>
-          <div class="tip-row"><span>Total Bill</span><span class="tip-val" id="tip-total">$57.50</span></div>
-          <div class="tip-row tip-row-highlight"><span>Per Person</span><span class="tip-val" id="tip-per">$57.50</span></div>
+          <div class="tip-row"><span data-i18n="tip-amt">Tip Amount</span><span class="tip-val" id="tip-amount">$7.50</span></div>
+          <div class="tip-row"><span data-i18n="tip-total">Total Bill</span><span class="tip-val" id="tip-total">$57.50</span></div>
+          <div class="tip-row tip-row-highlight"><span data-i18n="tip-per">Per Person</span><span class="tip-val" id="tip-per">$57.50</span></div>
         </div>
       </div>
     </section>
 
-    <!-- ══ AGE PANEL ══ -->
+    <!-- ══ AGE CALCULATOR ══════════════════════ -->
     <section class="panel" id="panel-age">
       <div class="panel-header"><h1 class="panel-title">Age Calculator</h1></div>
       <div class="tool-card">
         <div class="field-wrap">
-          <label>Date of Birth</label>
+          <label data-i18n="age-dob">Date of Birth</label>
           <input class="tool-input" id="age-dob" type="date"/>
         </div>
         <div class="field-wrap">
-          <label>Calculate Until</label>
+          <label data-i18n="age-until">Calculate Until</label>
           <input class="tool-input" id="age-to" type="date"/>
         </div>
-        <button class="calc-btn" id="age-calc-btn">Calculate Age</button>
+        <button class="calc-btn" id="age-calc-btn" data-i18n="age-calc">Calculate Age</button>
         <div class="result-display" id="age-result">
           <div class="age-grid" id="age-grid"></div>
           <div class="next-bday" id="next-bday"></div>
@@ -363,27 +436,27 @@
       </div>
     </section>
 
-    <!-- ══ LOAN PANEL ══ -->
+    <!-- ══ LOAN / EMI CALCULATOR ═══════════════ -->
     <section class="panel" id="panel-loan">
       <div class="panel-header"><h1 class="panel-title">Loan / EMI</h1></div>
       <div class="tool-card">
         <div class="field-wrap">
-          <label>Loan Amount ($)</label>
+          <label data-i18n="loan-amt">Loan Amount ($)</label>
           <input class="tool-input" id="loan-amount" type="number" placeholder="100000" value="100000"/>
         </div>
         <div class="field-wrap">
-          <label>Annual Interest Rate (%)</label>
+          <label data-i18n="loan-rate">Annual Interest Rate (%)</label>
           <input class="tool-input" id="loan-rate" type="number" placeholder="8.5" value="8.5" step="0.1"/>
         </div>
         <div class="field-wrap">
-          <label>Loan Term (Years)</label>
+          <label data-i18n="loan-term">Loan Term (Years)</label>
           <input class="tool-input" id="loan-years" type="number" placeholder="10" value="10"/>
         </div>
-        <button class="calc-btn" id="loan-calc-btn">Calculate EMI</button>
+        <button class="calc-btn" id="loan-calc-btn" data-i18n="loan-calc">Calculate EMI</button>
         <div class="loan-results" id="loan-results">
           <div class="loan-big">
             <div class="big-result" id="loan-emi">—</div>
-            <div class="result-label">Monthly EMI</div>
+            <div class="result-label" data-i18n="loan-emi-lbl">Monthly EMI</div>
           </div>
           <div class="loan-breakdown" id="loan-breakdown"></div>
           <div class="loan-chart-wrap">
@@ -396,7 +469,7 @@
 
   </main><!-- end main-content -->
 
-  <!-- History Drawer -->
+  <!-- ─── History Drawer ──────────────────────── -->
   <div class="history-drawer" id="history-drawer">
     <div class="drawer-header">
       <h2>History</h2>
@@ -409,8 +482,22 @@
   </div>
   <div class="drawer-overlay" id="drawer-overlay"></div>
 
+  <!-- ─── Currency Modal Bottom Sheet ───────────── -->
+  <div class="currency-modal-overlay" id="currency-modal-overlay">
+    <div class="currency-modal" id="currency-modal">
+      <div class="cm-header">
+        <input type="text" id="cm-search" class="cm-search-input" placeholder="Search currency or country..." data-i18n="cm-search" />
+        <button class="cm-close" id="cm-close">✕</button>
+      </div>
+      <div class="cm-body" id="currency-list">
+        <!-- List gets populated by JS -->
+      </div>
+    </div>
+  </div>
+
 </div><!-- end app -->
 
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="script.js"></script>
 </body>
 </html>
